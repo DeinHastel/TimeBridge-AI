@@ -96,8 +96,48 @@ export function TimeBridgeIA () {
               content: (
                 <div>
                   <h3 className="text-white text-2xl font-semibold"> Informacion del usuario</h3>
+                  <br />
                   {/* Aqui pondremos la informacion del usuario */}
-
+                    <div class="bg-gray-700 overflow-hidden shadow rounded-lg border">
+                      
+                      <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                          <dl class="sm:divide-y sm:divide-gray-200">
+                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                  <dt class="text-xl font-medium text-white">
+                                      Full name
+                                  </dt>
+                                  <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                      John Doe
+                                  </dd>
+                              </div>
+                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                  <dt class="text-xl font-medium text-white">
+                                      Email address
+                                  </dt>
+                                  <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                      johndoe@example.com
+                                  </dd>
+                              </div>
+                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                  <dt class="text-xl font-medium text-white">
+                                      Phone number
+                                  </dt>
+                                  <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                      (123) 456-7890
+                                  </dd>
+                              </div>
+                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                  <dt class="text-xl font-medium text-white">
+                                      Address
+                                  </dt>
+                                  <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                      123 Main St
+                                      Anytown, USA 12345
+                                  </dd>
+                              </div>
+                          </dl>
+                      </div>
+                  </div>
                 </div>
               )
             })}>
@@ -116,10 +156,10 @@ export function TimeBridgeIA () {
               <img src={Cohete} alt="" className="listaItemsImg" />Mejora a pro
           </button>
           <Modal open={open} onClose={() => setOpen(false)} title={modalTitle} >
-              <div className='text-center w-56'>
+              <div className='text-center w-560'>
 
               {imagenModal && <img src={imagenModal} alt="" className="mx-auto text-white imagenModal" />}
-                <div className='mx-auto my-4 w-48'>
+                <div className='mx-auto my-4 w-3000'>
               
               {modalContent && (
                   <>

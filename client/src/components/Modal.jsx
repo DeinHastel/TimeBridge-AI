@@ -13,7 +13,8 @@ export default function Modal({open, onClose, title, children}){
             onClick={(e) => e.stopPropagation()}
             className={`
             bg-gray-700 rounded-xl shadow p-6 transition-all 
-            ${open ? "scale-100 opacity-100" : "scale-125 opacity-0 "}`}>
+            w-2/4 h-3./4
+            ${open ? "scale-100 opacity-200" : "scale-125 opacity-0 "}`}>
 
             {/* Boton de cierre */}
             <button
@@ -25,7 +26,7 @@ export default function Modal({open, onClose, title, children}){
             </button>
             {/* Titulo */}
 
-            <h3 className='text-white text-lg font-semibold'>{title}</h3>
+            {title}
 
             {/* Contenido */}
             {children}
