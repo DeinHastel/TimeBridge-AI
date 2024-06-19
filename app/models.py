@@ -1,5 +1,12 @@
 from django.db import models
 
+class Rol(models.Model):
+    id_rol = models.AutoField(primary_key=True, unique=True)
+    nombre = models.CharField(max_length=50)
+    class Meta:
+        db_table = 'rol'
+
+
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key=True, unique=True)
     nombre = models.CharField(max_length=150)
@@ -7,6 +14,7 @@ class Usuario(models.Model):
     contraseña_actual = models.CharField(max_length=150)
     premiun = models.BooleanField(default=False)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True)
     class Meta:
         db_table = 'usuario'
 
@@ -18,12 +26,6 @@ class Contraseña(models.Model):
     class Meta:
         db_table = 'contraseña'
 
-class Entrenamiento_Datos(models.Model):
-    id_datos = models.AutoField(primary_key=True)
-    datos = models.TextField()
-    fecha_entrenamiento = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        db_table = 'entrenamiento_datos'
         
 class Chats(models.Model):
     id_chat = models.AutoField(primary_key=True)

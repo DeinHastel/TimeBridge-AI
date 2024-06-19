@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializer import UsuarioSerializer,ContraseñaSerializer,EntrenamientoSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
-from .models import Usuario,Contraseña,Entrenamiento_Datos,Conversacion,Compras,Chats
+from .serializer import UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
+from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
 # Create your views here.
 
 class UsuarioView(viewsets.ModelViewSet):
@@ -12,9 +12,9 @@ class ContraseñaView(viewsets.ModelViewSet):
     serializer_class = ContraseñaSerializer
     queryset = Contraseña.objects.all()
     
-class EntrenamientoView(viewsets.ModelViewSet):
-    serializer_class = EntrenamientoSerializer
-    queryset = Entrenamiento_Datos.objects.all()
+class RolView(viewsets.ModelViewSet):
+    serializer_class = RolSerializer
+    queryset = Rol.objects.all()
     
 class ConversacionView(viewsets.ModelViewSet):
     serializer_class = ConversacionSerializer
