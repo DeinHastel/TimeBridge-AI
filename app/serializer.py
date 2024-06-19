@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usuario,Contraseña,Entrenamiento_Datos,Conversacion,Compras,Chats
+from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,9 +11,9 @@ class ContraseñaSerializer(serializers.ModelSerializer):
         model = Contraseña
         fields = '__all__'
         
-class EntrenamientoSerializer(serializers.ModelSerializer):
+class RolSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Entrenamiento_Datos
+        model = Rol
         fields = '__all__'
         
 class ConversacionSerializer(serializers.ModelSerializer):
