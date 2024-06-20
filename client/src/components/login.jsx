@@ -53,11 +53,11 @@ export function LoginUsuario() {
             <p className='font-medium text-lg text-white mt-4'>ingrese datos de usuario.</p>
             <form onSubmit={onSubmit} className='mt-8 text-white '>
                 <div>
-                    <label className='text-xl text-lg font-medium'>Correo</label>
+                    <label className='text-xl font-medium'>Correo</label>
                     <input {...register("email", {required:true})} className='w-full border-2 border-purple-700 rounded-xl p-5 mt-2 bg-transparent text-white text-xl' type="email" placeholder='Ingresa tu correo' name='email' id='email'/>
                 </div>
                 <div>
-                <label className=' text-xl text-lg font-medium'>Contraseña</label>
+                <label className=' text-xl font-medium'>Contraseña</label>
                     <input {...register("contraseña_actual", {required:true})} className='w-full border-2 border-purple-700 rounded-xl p-5 mt-2 bg-transparent text-xl' type="password" placeholder='Ingresa tu contraseña' name='contraseña_actual' id='contraseña_actual'/>
                 </div>
                 <div className='mt-8 flex justify-between items-center'>
