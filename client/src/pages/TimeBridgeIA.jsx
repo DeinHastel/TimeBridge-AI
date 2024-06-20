@@ -12,6 +12,7 @@ import ChatgptLogo from '../assets/chatgptLogo.jpeg';
 import { sendMsgToOpenAI } from '../api/openai';
 import Modal from '../components/Modal';
 import { getChats } from "../api/chat.api"
+import { Insertarchats } from "../api/chat.api"
 
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
@@ -45,19 +46,38 @@ export function TimeBridgeIA () {
     },[messages]);
 
     const handleSend = async () => {
-      const text = input;
-      setInput('');
-      setMessages([
-        ...messages,
-        {text, isBot:false}
-      ])
-      const response = await sendMsgToOpenAI(text); // Usar la variable de estado 'input'
-      setMessages([
-        ...messages,
-        {text: text, isBot: false},
-        {text : response, isBot : true}
-      
-      ]);
+      const text = input.trim(); // Eliminar espacios en blanco al inicio y al final
+        if (text.length === 0) return; // No enviar mensajes vacíos
+
+        setInput('');
+
+        // Crear nuevo chat y guardarlo en la base de datos
+        const nuevoChat = {
+            titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
+            id_usuario: 9, // Cambiar por el ID del usuario de la sesión
+        };
+        try {
+          // Guardar el nuevo chat en la base de datos
+          await Insertarchats(nuevoChat);
+
+          // Agregar el mensaje al estado de mensajes
+          setMessages([
+              ...messages,
+              { text, isBot: false }
+          ]);
+
+          // Obtener la respuesta del modelo de OpenAI
+          const response = await sendMsgToOpenAI(text);
+          // Agregar la respuesta del modelo al estado de mensajes
+          setMessages([
+              ...messages,
+              { text, isBot: false },
+              { text: response, isBot: true }
+          ]);
+
+      } catch (error) {
+          console.error('Error al crear y guardar el nuevo chat:', error);
+      }
     }
 
     const handleEnter = async (e) => {
