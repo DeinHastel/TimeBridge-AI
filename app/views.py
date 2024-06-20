@@ -27,3 +27,11 @@ class ComprasView(viewsets.ModelViewSet):
 class ChatsView(viewsets.ModelViewSet):
     serializer_class = ChatsSerializer
     queryset = Chats.objects.all()
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        filter_param = self.request.query_params.get('filter', None)
+        
+        if filter_param:
+            queryset = queryset.filter(id_usuario=filter_param) 
+        
+        return queryset

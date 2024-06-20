@@ -12,7 +12,6 @@ class Usuario(models.Model):
     nombre = models.CharField(max_length=150)
     email = models.EmailField(unique=True, max_length=150)
     contraseña_actual = models.CharField(max_length=150)
-    premiun = models.BooleanField(default=False)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, default=1)
     class Meta:

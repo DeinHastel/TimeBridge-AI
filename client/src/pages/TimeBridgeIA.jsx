@@ -29,7 +29,9 @@ export function TimeBridgeIA () {
     useEffect(()=>{
 
     async function loadChats() {
-        const res = await  getChats()
+        //el userId es donde debe ir el id del usuario de la session
+        const userId = 9
+        const res = await  getChats(userId)
         
         setChats(res.data)
         
