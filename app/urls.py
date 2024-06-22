@@ -12,6 +12,4 @@ router.register(r'chats', ChatsView, 'chats' )
 
 urlpatterns = [
     path("pagina/v1/", include(router.urls)),
-    path('api-token-auth/', Login.as_view(), name='api_token_auth'),
-    path('api-logout/', logout, name='api_logout'),
 ] 

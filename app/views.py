@@ -41,28 +41,3 @@ class ChatsView(viewsets.ModelViewSet):
         
         return queryset
     
-class Login(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        try:
-            user = Usuario.objects.get(email=email)
-            if user.contraseña_actual == password:
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({
-                    'token': token.key,
-                    'user_id': user.pk,
-                    'email': user.email
-                })
-            else:
-                return Response({"error": "Credenciales Invalidas"}, status=status.HTTP_400_BAD_REQUEST)
-        except Usuario.DoesNotExist:
-            return Response({"error": "Usuario no existe"}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def logout(request):
-    try:
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
