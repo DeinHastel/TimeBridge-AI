@@ -31,9 +31,9 @@ export function LoginUsuario() {
     // Verificar si los datos del formulario están en los datos cargados
     const userExists = userData.some(user => {
         // estos eran pruebas para que vea como se traen los datos
-        // console.log("Comparando con el usuario:", user.email);
-        // console.log("Comparando con el contraseña:", dataDecrypt(user.contraseña_actual));
-        // console.log("Comparando con el contraseña form:", data.contraseña_actual);
+         console.log("Comparando con el usuario:", user.email);
+         console.log("Comparando con el contraseña:", dataDecrypt(user.contraseña_actual));
+         console.log("Comparando con el contraseña form:", data.contraseña_actual);
         return user.email === data.email && dataDecrypt(user.contraseña_actual) === data.contraseña_actual;
     });
 

@@ -1,10 +1,5 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
-from rest_framework.authtoken.views import ObtainAuthToken
-from django.contrib.auth import authenticate
 from .serializer import UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
 from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
 # Create your views here.

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import UsuarioView,ContraseñaView,RolView,ConversacionView,ComprasView,ChatsView,Login,logout
+from .views import UsuarioView,ContraseñaView,RolView,ConversacionView,ComprasView,ChatsView
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UsuarioView, 'usuario' )

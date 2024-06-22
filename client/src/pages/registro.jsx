@@ -81,7 +81,7 @@ export function RegistroUsuario() {
                 </div>
                 <div className='text-align-center mt-4 flex justify-items-center'>
                     <p class=' text-xl'>¿ya tienes un usuario?    </p>
-                    <button onClick={() => { window.location.href = '/login-users'; }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
+                    <button onClick={() => { window.location.href = '/login'; }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
                 </div>
                 <div className='mt-8 flex flex-col gap-y-4'>
                 <button className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-purple-700 text-black text-lg font-bold'>Ingresar</button>
