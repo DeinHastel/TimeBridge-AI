@@ -1,5 +1,5 @@
 
-import api from '..api/login';
+import api from '../api/login';
 
 export const login = async (email, password) => {
   try {

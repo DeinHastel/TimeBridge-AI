@@ -16,74 +16,86 @@ import { Insertarchats } from "../api/chat.api"
 
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
- 
     const [input, setInput] = useState("");
     const [messages, setMessages ] = useState([
       {
         text: "Hi, I am TimeBridgeAI",
         isBot: true,
       }
-  ]);
-  
+    ]);
+
+    const [selectedChat, setSelectedChat] = useState(null); // Estado para el chat seleccionado
     const [chats, setChats] = useState([]);
     
-    useEffect(()=>{
+    useEffect(()=>{ 
 
     async function loadChats() {
         //el userId es donde debe ir el id del usuario de la session
         const userId = 9
         const res = await  getChats(userId)
-        
         setChats(res.data)
-        
         console.log(res)
-        
       }
       loadChats();
-
-
       msgEnd.current.scrollIntoView();
     },[messages]);
 
     const handleSend = async () => {
       const text = input.trim(); // Eliminar espacios en blanco al inicio y al final
-        if (text.length === 0) return; // No enviar mensajes vacíos
-
-        setInput('');
-
-        // Crear nuevo chat y guardarlo en la base de datos
-        const nuevoChat = {
-            titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
-            id_usuario: 9, // Cambiar por el ID del usuario de la sesión
-        };
-        try {
-          // Guardar el nuevo chat en la base de datos
-          await Insertarchats(nuevoChat);
-
-          // Agregar el mensaje al estado de mensajes
-          setMessages([
-              ...messages,
-              { text, isBot: false }
-          ]);
-
-          // Obtener la respuesta del modelo de OpenAI
-          const response = await sendMsgToOpenAI(text);
-          // Agregar la respuesta del modelo al estado de mensajes
-          setMessages([
-              ...messages,
-              { text, isBot: false },
-              { text: response, isBot: true }
-          ]);
-
-      } catch (error) {
-          console.error('Error al crear y guardar el nuevo chat:', error);
+      if (text.length === 0) return; // No enviar mensajes vacíos
+  
+      setInput(''); // Limpiar el input después de obtener el texto
+  
+      if (selectedChat) {
+          try {
+              const response = await sendMsgToOpenAI(text);
+              setMessages([
+                  ...messages,
+                  { text, isBot: false },
+                  { text: response, isBot: true }
+              ]);
+          } catch (error) {
+              console.error('Error al enviar el mensaje:', error);
+          }
+      } else {
+          const nuevoChat = {
+              titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
+              id_usuario: 9, // Cambiar por el ID del usuario de la sesión
+          };
+  
+          try {
+              const res = await Insertarchats(nuevoChat);
+              const createdChat = res.data;
+            
+              // Actualizar el estado de los chats y seleccionar el chat recién creado
+              setChats([...chats, createdChat]);
+              handleChatSelect(createdChat.id_chat);
+  
+              setMessages([
+                  ...messages,
+                  { text, isBot: false }
+              ]);
+  
+              const response = await sendMsgToOpenAI(text);
+              setMessages([
+                  ...messages,
+                  { text, isBot: false },
+                  { text: response, isBot: true }
+              ]);
+          } catch (error) {
+              console.error('Error al crear y guardar el nuevo chat:', error);
+          }
       }
-    }
+  };
+  
 
     const handleEnter = async (e) => {
       if(e.key=='Enter') await handleSend();
-
     }
+    const handleChatSelect = (chatId) => {
+      console.log(`Chat seleccionado: ${chatId}`); // Agregar log para depuración
+      setSelectedChat(chatId);
+    };
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
@@ -103,13 +115,17 @@ export function TimeBridgeIA () {
             <div className="arribaCostadoEncima"><img src={TimeLogo} alt="Logo" className="logo" /><span className="marca">TimeBridgeAI</span></div>
             <button className="botonMedio" onClick={()=>{window.location.reload()}}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
             <div className="arribaCostadoDebajo">
-
-              {chats.map(task => (
-                <button className="query"><img src={MsgIcon} alt="Query" className="" />{task.titulo}</button>
-                ))}
-                
-
-          
+            {chats.map(chat => (
+                <button
+                  key={chat.id_chat}
+                  className={`flex items-center justify-start px-1 py-2 rounded-md mb-2 text-2xl
+                                ${selectedChat === chat.id_chat ? 'bg-blue-300 text-black' : 'hover:bg-red-200'}
+                            `}
+                  onClick={() => handleChatSelect(chat.id_chat)}
+                >
+                  <img src={MsgIcon} alt="Query" className="w-6 h-6 mr-4" />{chat.titulo}
+                </button>
+              ))}
             </div>
 
           </div>

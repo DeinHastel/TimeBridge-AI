@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {BrowserRouter, Routes, Route, Navigate, Switch} from 'react-router-dom'
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import {TimeBridgeIA} from './pages/TimeBridgeIA'
 import { BackRegistrados } from './components/BackRegistrados'
 import { RegistroUsuario } from './pages/registro'
@@ -13,13 +13,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-      <Switch>
+      
         <Route path='/login' element={<FormUsers/>} />
         <Route path='/registered' element={<BackRegistrados/>} />
         <Route path='/registrate' element={<FormRegistro/>} />
         <Route path='/' element={<Navigate to="/login"/>} />
-        <ProtectedRoute path="/timebridge" element={<TimeBridgeIA/>} />
-        </Switch>
+        <Route path="/timebridge" element={<TimeBridgeIA/>} />
+        
 
       </Routes>
     </BrowserRouter>
