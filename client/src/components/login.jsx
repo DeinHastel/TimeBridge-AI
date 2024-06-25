@@ -11,8 +11,6 @@ import loginService from '../api/login.api'
 export function LoginUsuario() {
     const {register, handleSubmit, formState:{errors}} = useForm()
     const [userData, setUserData] = useState([]);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [user, SetUser] = useState(null);
     const navigate = useNavigate();
 
@@ -38,9 +36,9 @@ export function LoginUsuario() {
     const userExists = userData.some(user => {
         // estos eran pruebas para que vea como se traen los datos
 
-         console.log("Comparando con el usuario:", user.email);
-         console.log("Comparando con el contraseña:", dataDecrypt(user.contraseña_actual));
-         console.log("Comparando con el contraseña form:", data.contraseña_actual);
+         //console.log("Comparando con el usuario:", user.email);
+         //console.log("Comparando con el contraseña:", dataDecrypt(user.contraseña_actual));
+         //console.log("Comparando con el contraseña form:", data.contraseña_actual);
         return user.email === data.email && dataDecrypt(user.contraseña_actual) === data.contraseña_actual;
         
     });
@@ -48,16 +46,7 @@ export function LoginUsuario() {
     
     if (userExists) {
         try {
-          const response = await loginService.login({
-            username: data.email,
-            password: data.contraseña_actual,
-          });
 
-          SetUser(response);
-          username = data.email
-          password = data.contraseña_actual
-          setUsername('')
-          setPassword('')
           navigate('/timebridge');
         } catch (error) {
           console.error(error);

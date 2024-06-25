@@ -7,8 +7,6 @@ def generate_token(user):
     expires_at = datetime.timezone() + timedelta(hours=1)  # Token expires in 1 hour
     return token, expires_at
 
-
-
 def verify_token(token):
     try:
         user = Usuario.objects.get(token=token)
