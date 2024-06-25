@@ -35,11 +35,16 @@ class Chats(models.Model):
         db_table = 'chats' 
 
 class Conversacion(models.Model):
+    ROL_CHOICES = [
+        ('user', 'User'),
+        ('bot', 'Bot'),
+    ]
     id_conversacion = models.AutoField(primary_key=True)
+    rol = models.CharField(max_length=10, choices=ROL_CHOICES)
     texto = models.TextField()
     id_chat = models.ForeignKey(Chats, on_delete=models.CASCADE)
     fecha_conversacion = models.DateTimeField(auto_now_add=True)
-    adjunto = models.FileField(upload_to='adjuntos/')
+    adjunto = models.FileField(upload_to='adjuntos/', null=True)
     class Meta:
         db_table = 'conversacion'   
 

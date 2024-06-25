@@ -9,7 +9,7 @@ import Cohete from '../assets/rocket.svg';
 import EnviarBtn from '../assets/send.svg';
 import IconoUsuario from '../assets/user-icon.png';
 import ChatgptLogo from '../assets/chatgptLogo.jpeg';
-import { sendMsgToOpenAI } from '../api/openai';
+import { sendMsgToBackend } from '../api/openai';
 import Modal from '../components/Modal';
 import { getChats } from "../api/chat.api"
 import { Insertarchats } from "../api/chat.api"
@@ -32,7 +32,7 @@ export function TimeBridgeIA () {
     async function loadChats() {
         //el userId es donde debe ir el id del usuario de la session
         const userId = 9
-        const res = await  getChats(userId)
+        const res = await  getChats(userId) 
         setChats(res.data)
         console.log(res)
       }
@@ -48,7 +48,7 @@ export function TimeBridgeIA () {
   
       if (selectedChat) {
           try {
-              const response = await sendMsgToOpenAI(text);
+              const response = await sendMsgToBackend(selectedChat, text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
@@ -76,7 +76,7 @@ export function TimeBridgeIA () {
                   { text, isBot: false }
               ]);
   
-              const response = await sendMsgToOpenAI(text);
+              const response = await sendMsgToBackend(selectedChat, text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
