@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
+from django.contrib.auth.admin import UserAdmin
+from .models import User,Contraseña,Rol,Conversacion,Compras,Chats
 
 # Register your models here.
-admin.site.register(Usuario)
+admin.site.register(User, UserAdmin)
 admin.site.register(Contraseña)
 admin.site.register(Rol)
 admin.site.register(Conversacion)

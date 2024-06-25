@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class Rol(models.Model):
@@ -7,21 +8,23 @@ class Rol(models.Model):
     class Meta:
         db_table = 'rol'
 
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True, unique=True)
-    nombre = models.CharField(max_length=150)
+
+class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=150)
-    contraseña_actual = models.CharField(max_length=150)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, default=1)
-    class Meta:
-        db_table = 'usuario'
+    rol = models.ForeignKey('Rol', on_delete=models.SET_NULL, null=True, default=1)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+    
+    def __str__(self) -> str:
+        return self.email
+
 
 class Contraseña(models.Model):
     id_contraseña = models.AutoField(primary_key=True)
     contraseña = models.CharField(max_length=150)
     fecha_actualizacion = models.DateTimeField(auto_now_add=True)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:
         db_table = 'contraseña'
 
@@ -29,29 +32,24 @@ class Contraseña(models.Model):
 class Chats(models.Model):
     id_chat = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=150)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = 'chats' 
 
 class Conversacion(models.Model):
-    ROL_CHOICES = [
-        ('user', 'User'),
-        ('bot', 'Bot'),
-    ]
     id_conversacion = models.AutoField(primary_key=True)
-    rol = models.CharField(max_length=10, choices=ROL_CHOICES)
     texto = models.TextField()
     id_chat = models.ForeignKey(Chats, on_delete=models.CASCADE)
     fecha_conversacion = models.DateTimeField(auto_now_add=True)
-    adjunto = models.FileField(upload_to='adjuntos/', null=True)
+    adjunto = models.FileField(upload_to='adjuntos/')
     class Meta:
         db_table = 'conversacion'   
 
 
 class Compras(models.Model):
     id_compra = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     metodo_pago = models.CharField(max_length=150)
     pago = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_compra = models.DateTimeField(auto_now_add=True)
