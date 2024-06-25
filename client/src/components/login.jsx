@@ -2,14 +2,18 @@ import '../normal.css'
 import '../App.css';
 import * as React from 'react'
 import {useForm} from "react-hook-form"
-import { Link,   useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from "react"
 import { dataDecrypt } from "../utils/data-decrypt"
 import { ObtenerUsuarios } from '../api/registrados.api'
+import loginService from '../api/login.api'
  
 export function LoginUsuario() {
     const {register, handleSubmit, formState:{errors}} = useForm()
     const [userData, setUserData] = useState([]);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [user, SetUser] = useState(null);
     const navigate = useNavigate();
 
     // Función para cargar los usuarios
@@ -18,6 +22,7 @@ export function LoginUsuario() {
       const res = await ObtenerUsuarios();
       const datos = res.data;
       setUserData(datos);
+
     //   console.log("Datos de userData:", datos);
 
     }
@@ -25,27 +30,43 @@ export function LoginUsuario() {
     loadTasks();
   }, []);
 
+
   // funcion de envio de datos al dar click en el boton de enviar
   const onSubmit= handleSubmit(async data =>{
         
     // Verificar si los datos del formulario están en los datos cargados
     const userExists = userData.some(user => {
         // estos eran pruebas para que vea como se traen los datos
+
          console.log("Comparando con el usuario:", user.email);
          console.log("Comparando con el contraseña:", dataDecrypt(user.contraseña_actual));
          console.log("Comparando con el contraseña form:", data.contraseña_actual);
         return user.email === data.email && dataDecrypt(user.contraseña_actual) === data.contraseña_actual;
+        
     });
 
     
     if (userExists) {
-        console.log("Usuario válido");
-        // Realizar acciones cuando el usuario es válido
-        navigate('/timebridge')
-    } else {
-        console.log("Usuario no válido");
-        // Realizar acciones cuando el usuario no es válido
-    }
+        try {
+          const response = await loginService.login({
+            username: data.email,
+            password: data.contraseña_actual,
+          });
+
+          SetUser(response);
+          username = data.email
+          password = data.contraseña_actual
+          setUsername('')
+          setPassword('')
+          navigate('/timebridge');
+        } catch (error) {
+          console.error(error);
+          // Handle login error
+        }
+      } else {
+        console.error('Usuario o contraseña invalidos');
+       
+      }
 })
     return(
         <div className='bg-black px-10 py-20 rounded-3xl border-2 border-purple-700 text-white' >

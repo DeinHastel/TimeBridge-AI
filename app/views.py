@@ -2,7 +2,32 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from .serializer import UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
 from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
+from django.http import JsonResponse
+from .token_generator import generate_token, verify_token
 # Create your views here.
+
+def login_view(request):
+    email = request.POST.get('email')
+    password = request.POST.get('contraseña_actual')
+
+    try:
+        user = Usuario.objects.get(email=email)
+        if user.contraseña_actual == password:
+            token, expires_at = generate_token(user)
+            return JsonResponse({'token': token, 'expires_at': expires_at})
+        else:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+    except Usuario.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    
+def protected_view(request):
+    token = request.headers.get('Authorization')
+    user = verify_token(token)
+    if user:
+        # User is authenticated, proceed with the view
+        return JsonResponse({'message': 'Hello, authenticated user!'})
+    else:
+        return JsonResponse({'error': 'Invalid token'}, status=401)
 
 class UsuarioView(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer

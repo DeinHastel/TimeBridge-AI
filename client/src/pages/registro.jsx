@@ -38,7 +38,7 @@ export function RegistroUsuario() {
                 //aqui se llaman las funciones de la carpeta utils para encrytar
                 const pass_encrypt = dataEncrypt(data.contraseña_actual)
                 const res = await InsertarUsuario({ ...data, contraseña_actual: pass_encrypt });
-                navigate('/login-users');
+                navigate('/login');
             }else{
                 alert("Las contraseñas no coinciden");
             }
