@@ -9,9 +9,34 @@ from .ignore import api_key
 import openai
 from .serializer import UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
 from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
+from django.http import JsonResponse
+from .token_generator import generate_token, verify_token
 # Create your views here.
 
 openai.api_key = api_key
+
+def login_view(request):
+    email = request.POST.get('email')
+    password = request.POST.get('contraseña_actual')
+
+    try:
+        user = Usuario.objects.get(email=email)
+        if user.contraseña_actual == password:
+            token, expires_at = generate_token(user)
+            return JsonResponse({'token': token, 'expires_at': expires_at})
+        else:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+    except Usuario.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    
+def protected_view(request):
+    token = request.headers.get('Authorization')
+    user = verify_token(token)
+    if user:
+        # User is authenticated, proceed with the view
+        return JsonResponse({'message': 'Hello, authenticated user!'})
+    else:
+        return JsonResponse({'error': 'Invalid token'}, status=401)
 
 class UsuarioView(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
@@ -71,31 +96,5 @@ class ChatsView(viewsets.ModelViewSet):
         if filter_param:
             queryset = queryset.filter(id_usuario=filter_param) 
         
-        return queryset.order_by('-id_chat')  # ordena por id en orden inverso
-
+        return queryset.order_by('-id_chat')
     
-class Login(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        try:
-            user = Usuario.objects.get(email=email)
-            if user.contraseña_actual == password:
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({
-                    'token': token.key,
-                    'user_id': user.pk,
-                    'email': user.email
-                })
-            else:
-                return Response({"error": "Credenciales Invalidas"}, status=status.HTTP_400_BAD_REQUEST)
-        except Usuario.DoesNotExist:
-            return Response({"error": "Usuario no existe"}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def logout(request):
-    try:
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
