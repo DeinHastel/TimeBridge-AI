@@ -1,11 +1,11 @@
 from django.db import models
 
-
 class Rol(models.Model):
     id_rol = models.AutoField(primary_key=True, unique=True)
     nombre = models.CharField(max_length=50)
     class Meta:
         db_table = 'rol'
+
 
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key=True, unique=True)

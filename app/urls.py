@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import UsuarioView,ContraseñaView,RolView,ConversacionView,ComprasView,ChatsView,login_view,verify_token
+from .views import UsuarioView,ContraseñaView,RolView,ConversacionView,ComprasView,ChatsView,Login,logout
 
 router = routers.DefaultRouter()
 router.register(r'usuario', UsuarioView, 'usuario' )
@@ -12,6 +12,6 @@ router.register(r'chats', ChatsView, 'chats' )
 
 urlpatterns = [
     path("pagina/v1/", include(router.urls)),
-    path("pagina/v1/login/", login_view, name='login'),
-    path("pagina/v1/verify/", verify_token, name='verify'),
+    path('api-token-auth/', Login.as_view(), name='api_token_auth'),
+    path('api-logout/', logout, name='api_logout'),
 ] 

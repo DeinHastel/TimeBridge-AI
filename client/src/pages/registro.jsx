@@ -38,7 +38,7 @@ export function RegistroUsuario() {
                 //aqui se llaman las funciones de la carpeta utils para encrytar
                 const pass_encrypt = dataEncrypt(data.contraseña_actual)
                 const res = await InsertarUsuario({ ...data, contraseña_actual: pass_encrypt });
-                navigate('/login');
+                navigate('/login-users');
             }else{
                 alert("Las contraseñas no coinciden");
             }
@@ -65,7 +65,7 @@ export function RegistroUsuario() {
                     <input {...register("contraseña_actual", {required: true})} className='w-full border-2 border-purple-700 rounded-xl p-5 mt-2 bg-transparent text-xl' type="password" placeholder='Ingresa tu contraseña' name='contraseña_actual' id='contraseña_actual'/>
                 </div>
                 <div>
-                    <label className='  text-xl font-medium'>Confirmar Contraseña</label>
+                    <label className=' text-xl text-xl font-medium'>Confirmar Contraseña</label>
                     <input {...register("pass2", {required: true})} className='w-full border-2 border-purple-700 rounded-xl p-5 mt-2 bg-transparent text-xl' type="password" placeholder='Ingresa tu contraseña' name='pass2' id='pass2'/>
                 </div>
                 
@@ -75,13 +75,13 @@ export function RegistroUsuario() {
                             type='checkbox'
                             id='recuerdame'
                         />
-                        <label className=' ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
+                        <label className='text-xl ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
                     </div>
-                    <button className='font-medium text-base text-purple-700'>Olvide mi contraseña</button>
+                    <button className='text-xl font-medium text-base text-purple-700'>Olvide mi contraseña</button>
                 </div>
                 <div className='text-align-center mt-4 flex justify-items-center'>
                     <p class=' text-xl'>¿ya tienes un usuario?    </p>
-                    <button onClick={() => { window.location.href = '/login'; }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
+                    <button onClick={() => { window.location.href = '/login-users'; }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
                 </div>
                 <div className='mt-8 flex flex-col gap-y-4'>
                 <button className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-purple-700 text-black text-lg font-bold'>Ingresar</button>
