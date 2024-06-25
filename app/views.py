@@ -71,7 +71,8 @@ class ChatsView(viewsets.ModelViewSet):
         if filter_param:
             queryset = queryset.filter(id_usuario=filter_param) 
         
-        return queryset
+        return queryset.order_by('-id_chat')  # ordena por id en orden inverso
+
     
 class Login(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
