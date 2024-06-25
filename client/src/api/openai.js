@@ -21,7 +21,7 @@ export async function sendMsgToOpenAI(message) {
     };
 
     // Realiza la solicitud a la API de OpenAI usando Axios
-    console.log(requestData)
+    //console.log(requestData)
     const response = await axios.post(apiUrlopenai, requestData, {
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export async function sendMsgToOpenAI(message) {
     });
 
     // Devuelve el texto generado
-    console.log(response.data)
+    //console.log(response.data)
     return response.data.choices[0].text;
   } catch (error) {
     if (error.response) {
