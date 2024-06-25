@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { apikey } from '../constantes/apikey';
 
-// Configura la clave de API
-const apiKey = apikey;
-const apiUrl = 'https://api.openai.com/v1/completions';
+// Cambia la URL de la API a la de tu backend
+
+const apiUrl = 'http://localhost:8000/conversacion/pagina/v1/conversacion/';
+const apiUrlopenai = 'https://api.openai.com/v1/completions';
+
 
 export async function sendMsgToOpenAI(message) {
   try {
@@ -20,17 +22,16 @@ export async function sendMsgToOpenAI(message) {
 
     // Realiza la solicitud a la API de OpenAI usando Axios
     console.log(requestData)
-    const response = await axios.post(apiUrl, requestData, {
+    const response = await axios.post(apiUrlopenai, requestData, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${apikey}`,
       },
     });
 
     // Devuelve el texto generado
     console.log(response.data)
     return response.data.choices[0].text;
-    
   } catch (error) {
     if (error.response) {
       
@@ -42,4 +43,40 @@ export async function sendMsgToOpenAI(message) {
     }
     throw new Error('Error al procesar la solicitud a OpenAI');
   }
+}
+
+export async function sendMsgToBackend(chatId, message) {
+  try {
+    // Configura la solicitud a tu backend
+    const requestData = {
+      chat_id: chatId,
+      messages: [
+        {
+          role: 'user',
+          content: message,
+        },
+      ],
+    };
+
+    // Realiza la solicitud a tu backend usando Axios
+    const response = await axios.post(apiUrl, requestData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Devuelve el texto generado por el bot
+    return sendMsgToOpenAI(message)
+
+  } catch (error) {
+    if (error.response) {
+      console.error('Error al realizar la solicitud a tu backend:', response.data);
+    } else if (error.request) {
+      console.error('No se recibió respuesta de tu backend:', error.request);
+    } else {
+      console.error('Error al realizar la solicitud a tu backend:', error.message);
+    }
+    throw new Error('Error al procesar la solicitud a tu backend');
+  }
+  
 }

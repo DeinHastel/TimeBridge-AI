@@ -9,11 +9,9 @@ import Cohete from '../assets/rocket.svg';
 import EnviarBtn from '../assets/send.svg';
 import IconoUsuario from '../assets/user-icon.png';
 import ChatgptLogo from '../assets/chatgptLogo.jpeg';
-import { sendMsgToOpenAI } from '../api/openai';
+import { sendMsgToBackend } from '../api/openai';
 import Modal from '../components/Modal';
-import { getChats } from "../api/chat.api"
-import { Insertarchats } from "../api/chat.api"
-
+import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
     const [input, setInput] = useState("");
@@ -32,7 +30,7 @@ export function TimeBridgeIA () {
     async function loadChats() {
         //el userId es donde debe ir el id del usuario de la session
         const userId = 9
-        const res = await  getChats(userId)
+        const res = await  getChats(userId) 
         setChats(res.data)
         console.log(res)
       }
@@ -48,7 +46,7 @@ export function TimeBridgeIA () {
   
       if (selectedChat) {
           try {
-              const response = await sendMsgToOpenAI(text);
+              const response = await sendMsgToBackend(selectedChat, text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
@@ -76,7 +74,7 @@ export function TimeBridgeIA () {
                   { text, isBot: false }
               ]);
   
-              const response = await sendMsgToOpenAI(text);
+              const response = await sendMsgToBackend(selectedChat, text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
@@ -87,7 +85,41 @@ export function TimeBridgeIA () {
           }
       }
   };
-  
+  const handleDeleteChat = async (chatId) => {
+    const confirmed = window.confirm("¿Quieres borrar el chat?");
+    if (!confirmed) return;
+
+    try {
+        await deleteChat(chatId);
+        // Filtrar los chats para quitar el chat eliminado
+        const updatedChats = chats.filter(chat => chat.id_chat !== chatId);
+        setChats(updatedChats);
+        // Si el chat seleccionado es el que se está eliminando, limpiar la selección
+        if (selectedChat === chatId) {
+            setSelectedChat(null);
+            setMessages([{ text: "Hi, I am TimeBridgeAI", isBot: true }]); // Limpiar mensajes si se elimina el chat seleccionado
+        }
+    } catch (error) {
+        console.error('Error al eliminar el chat:', error);
+    }
+};
+
+
+    const handleRenameChat = async (chatId) => {
+        const newTitle = prompt("Nuevo nombre del chat");
+        if (newTitle && newTitle.trim() !== '') {
+            try {
+                await updateChat(chatId, { titulo: newTitle });
+                const updatedChats = chats.map(chat => 
+                    chat.id_chat === chatId ? { ...chat, titulo: newTitle } : chat
+                );
+                setChats(updatedChats);
+            } catch (error) {
+                console.error('Error al renombrar el chat:', error);
+            }
+        }
+    };
+
 
     const handleEnter = async (e) => {
       if(e.key=='Enter') await handleSend();
@@ -96,6 +128,7 @@ export function TimeBridgeIA () {
       console.log(`Chat seleccionado: ${chatId}`); // Agregar log para depuración
       setSelectedChat(chatId);
     };
+    
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
@@ -116,15 +149,24 @@ export function TimeBridgeIA () {
             <button className="botonMedio" onClick={()=>{window.location.reload()}}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
             <div className="arribaCostadoDebajo">
             {chats.map(chat => (
-                <button
-                  key={chat.id_chat}
-                  className={`flex items-center justify-start px-1 py-2 rounded-md mb-2 text-2xl
-                                ${selectedChat === chat.id_chat ? 'bg-blue-300 text-black' : 'hover:bg-red-200'}
-                            `}
-                  onClick={() => handleChatSelect(chat.id_chat)}
-                >
-                  <img src={MsgIcon} alt="Query" className="w-6 h-6 mr-4" />{chat.titulo}
-                </button>
+                <div key={chat.id_chat} className={`flex items-center justify-start w-full px-1 py-2 rounded-md mb-2 text-2xl
+                  ${selectedChat === chat.id_chat ? 'bg-teal-600 text-black' : 'hover:bg-teal-500'}
+                            `}>
+                                <button
+                                    className="flex items-center justify-start w-full"
+                                    onClick={() => handleChatSelect(chat.id_chat)}
+                                >
+                                    <img src={MsgIcon} alt="Query" className="w-6 h-6 mr-2" />
+                                    <span className="ml-2">{chat.titulo}</span>
+                                </button>
+                                <div className="dropdown">
+                                    <button className="dropbtn">⋮</button>
+                                    <div className="dropdown-content">
+                                        <button className='block px-3 py-2 text-m text-gray-700' onClick={() => handleRenameChat(chat.id_chat)}>Renombrar</button>
+                                        <button className='block px-3 py-2 text-m text-gray-700' onClick={() => handleDeleteChat(chat.id_chat)}>Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
               ))}
             </div>
 

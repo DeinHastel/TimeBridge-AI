@@ -10,3 +10,7 @@ export const getChats = (filter) => {
 }
 
 export const Insertarchats = (chats) =>  ChatsApi.post('/', chats)
+
+export const deleteChat = (id) => ChatsApi.delete(`/${id}`);
+
+export const updateChat = (id, data) => ChatsApi.put(`/${id}`, data);
