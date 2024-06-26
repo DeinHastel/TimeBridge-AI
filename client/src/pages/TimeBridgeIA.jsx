@@ -9,7 +9,7 @@ import Cohete from '../assets/rocket.svg';
 import EnviarBtn from '../assets/send.svg';
 import IconoUsuario from '../assets/user-icon.png';
 import ChatgptLogo from '../assets/chatgptLogo.jpeg';
-import { sendMsgToBackend } from '../api/openai';
+import { sendMsgToBackend, sendMsgToOpenAI } from '../api/openai';
 import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
 export function TimeBridgeIA () {
@@ -29,14 +29,14 @@ export function TimeBridgeIA () {
 
     async function loadChats() {
         //el userId es donde debe ir el id del usuario de la session
-        const userId = 9
+        const userId = 2
         const res = await  getChats(userId) 
         setChats(res.data)
         console.log(res)
       }
       loadChats();
       msgEnd.current.scrollIntoView();
-    },[messages]);
+    },[selectedChat]);
 
     const handleSend = async () => {
       const text = input.trim(); // Eliminar espacios en blanco al inicio y al final
@@ -46,7 +46,7 @@ export function TimeBridgeIA () {
   
       if (selectedChat) {
           try {
-              const response = await sendMsgToBackend(selectedChat, text);
+              const response = await sendMsgToOpenAI(text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
@@ -58,7 +58,7 @@ export function TimeBridgeIA () {
       } else {
           const nuevoChat = {
               titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
-              id_usuario: 9, // Cambiar por el ID del usuario de la sesión
+              id_usuario: 2, // Cambiar por el ID del usuario de la sesión
           };
   
           try {
@@ -74,7 +74,7 @@ export function TimeBridgeIA () {
                   { text, isBot: false }
               ]);
   
-              const response = await sendMsgToBackend(selectedChat, text);
+              const response = await sendMsgToOpenAI(text);
               setMessages([
                   ...messages,
                   { text, isBot: false },
@@ -127,6 +127,10 @@ export function TimeBridgeIA () {
     const handleChatSelect = (chatId) => {
       console.log(`Chat seleccionado: ${chatId}`); // Agregar log para depuración
       setSelectedChat(chatId);
+      setMessages([
+        { text: "Hi, I am TimeBridgeAI",
+          isBot: true, }
+    ]);
     };
     
     const [open, setOpen] = useState(false);

@@ -13,6 +13,7 @@ export function RegistroUsuario() {
     });
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -26,12 +27,26 @@ export function RegistroUsuario() {
         if(isLoading)return;
             
         setIsLoading(true);
+        setErrorMessage('');
         try{
             const data = await registerUser(formData);
             console.log("success", data)
             navigate('/login');
         }
         catch(error){
+            if (error.email) {
+            setErrorMessage("Error con el correo: " + error.email);
+            }
+            if (error.username) {
+            setErrorMessage("Error con el nombre de usuario: " + error.username);
+            }
+            if (error.non_field_errors) {
+            setErrorMessage("Error con la contraseña: " + error.non_field_errors);
+            }
+            else (error)=> {
+            setErrorMessage("Error desconocido: " + error);
+            }
+            
             console.error("Error al registrarse", error)
         } finally {
             setIsLoading(false);
@@ -87,6 +102,7 @@ export function RegistroUsuario() {
                     className='w-full border-2 border-purple-700 rounded-xl p-5 mt-2 bg-transparent text-xl'/>
                 </div>
                 
+                {errorMessage && <p className='text-red-500 mt-2'>{errorMessage}</p>}
                 <div className='mt-8 flex justify-between items-center'>
                     <div>
                         <input  
@@ -99,7 +115,7 @@ export function RegistroUsuario() {
                 </div>
                 <div className='text-align-center mt-4 flex justify-items-center'>
                     <p class=' text-xl'>¿ya tienes un usuario?    </p>
-                    <button onClick={() => { window.location.href = '/login'; }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
+                    <button onClick={() => { navigate('/login'); }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
                 </div>
                 <div className='mt-8 flex flex-col gap-y-4'>
                 <button
