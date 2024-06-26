@@ -10,11 +10,11 @@ class Rol(models.Model):
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True, max_length=150)
+    email = models.EmailField(unique=True, max_length=90)
     rol = models.ForeignKey('Rol', on_delete=models.SET_NULL, null=True, default=1)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username']
     
     def __str__(self) -> str:
         return self.email
@@ -22,7 +22,7 @@ class User(AbstractUser):
 
 class Contraseña(models.Model):
     id_contraseña = models.AutoField(primary_key=True)
-    contraseña = models.CharField(max_length=150)
+    contraseña = models.CharField(max_length=30)
     fecha_actualizacion = models.DateTimeField(auto_now_add=True)
     id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:
@@ -31,7 +31,7 @@ class Contraseña(models.Model):
         
 class Chats(models.Model):
     id_chat = models.AutoField(primary_key=True)
-    titulo = models.CharField(max_length=150)
+    titulo = models.CharField(max_length=50)
     id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     class Meta:
@@ -50,10 +50,10 @@ class Conversacion(models.Model):
 class Compras(models.Model):
     id_compra = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    metodo_pago = models.CharField(max_length=150)
+    metodo_pago = models.CharField(max_length=100)
     pago = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_compra = models.DateTimeField(auto_now_add=True)
-    estado_compra = models.CharField(max_length=150)
+    estado_compra = models.CharField(max_length=100)
     class Meta:
         db_table = 'compras'
         
