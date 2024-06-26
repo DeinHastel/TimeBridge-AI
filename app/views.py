@@ -1,46 +1,80 @@
+import token
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import ObtainAuthToken
+#Auntenticacion bellow
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+
 from django.contrib.auth import authenticate
-from .ignore import api_key
-import openai
-from .serializer import UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
-from .models import Usuario,Contraseña,Rol,Conversacion,Compras,Chats
-from django.http import JsonResponse
-from .token_generator import generate_token, verify_token
+from .serializer import UserLoginSerializer, UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
+from .models import User,Contraseña,Rol,Conversacion,Compras,Chats
+from .serializer import UserRegistrationSerializer
+from app import serializer
+
 # Create your views here.
 
-openai.api_key = api_key
-
-def login_view(request):
-    email = request.POST.get('email')
-    password = request.POST.get('contraseña_actual')
-
-    try:
-        user = Usuario.objects.get(email=email)
-        if user.contraseña_actual == password:
-            token, expires_at = generate_token(user)
-            return JsonResponse({'token': token, 'expires_at': expires_at})
-        else:
-            return JsonResponse({'error': 'Invalid credentials'}, status=401)
-    except Usuario.DoesNotExist:
-        return JsonResponse({'error': 'User not found'}, status=404)
+class UserRegistrationAPIView(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserRegistrationSerializer
     
-def protected_view(request):
-    token = request.headers.get('Authorization')
-    user = verify_token(token)
-    if user:
-        # User is authenticated, proceed with the view
-        return JsonResponse({'message': 'Hello, authenticated user!'})
-    else:
-        return JsonResponse({'error': 'Invalid token'}, status=401)
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token = RefreshToken.for_user(user)
+        data = serializer.data
+        data['tokens'] = {'refresh':str(token),
+                          'access': str(token.access_token)}
+        return Response(data, status= status.HTTP_201_CREATED)
+    
+class UserLoginAPIView(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserLoginSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data= request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        serializer = UsuarioSerializer(user)
+        token = RefreshToken.for_user(user)
+        data = serializer.data
+        data['tokens'] = {'refresh':str(token),
+                          'access': str(token.access_token)}
+        return Response(data, status=status.HTTP_200_OK)
+    
+class UserLogoutAPIView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class UserInfoAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UsuarioSerializer
+    
+    def get_object(self):
+        return self.request.user
+    
+    
+    
+    
+
 
 class UsuarioView(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
-    queryset = Usuario.objects.all()
+    queryset = User.objects.all()
     
 class ContraseñaView(viewsets.ModelViewSet):
     serializer_class = ContraseñaSerializer
