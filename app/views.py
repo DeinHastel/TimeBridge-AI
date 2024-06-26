@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import ObtainAuthToken
 #Auntenticacion bellow
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
@@ -25,7 +25,7 @@ class UserRegistrationAPIView(GenericAPIView):
     
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exeption=True)
+        serializer.is_valid(raise_exception=True)
         user = serializer.save()
         token = RefreshToken.for_user(user)
         data = serializer.data
@@ -59,6 +59,14 @@ class UserLogoutAPIView(GenericAPIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class UserInfoAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UsuarioSerializer
+    
+    def get_object(self):
+        return self.request.user
+    
     
     
     
