@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { loginUser } from '../api/userServicesLogin.api';
 
  
-export function LoginUsuario() {
+export function LoginUsuario({ onLoginSuccess }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -34,8 +34,13 @@ export function LoginUsuario() {
       console.log("success", data)
       localStorage.setItem("accessToken", data.tokens.access);
       localStorage.setItem("refreshToken", data.tokens.refresh)
-      navigate('/timebridge');
+
+      onLoginSuccess(data.username);
+      navigate('/timebridge')
+      console.log(data)
+
     }
+
     catch (error) {
       console.error("Error al iniciar sesion", error)
       
@@ -44,12 +49,13 @@ export function LoginUsuario() {
       setIsLoading(false);
     }
   };
+  
 
     return(
         <div className='bg-black px-10 py-20 rounded-3xl border-2 border-purple-700 text-white' >
             <h1 className='text-5xl font-semibold text-purple-700'>Bienvenido</h1>
             <p className='font-medium text-xl text-white mt-4'>Por favor ingresa tus datos.</p>
-            <form className='mt-8 text-white'>
+            <form className='mt-8 text-white' onSubmit={handleSubmit}>
                 <div>
                     <label className='text-xl font-medium'>Correo</label>
                     <input

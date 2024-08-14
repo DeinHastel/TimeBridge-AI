@@ -1,10 +1,10 @@
 import { LoginUsuario } from "../components/login";
 
-export function FormUsers () {
+export function FormUsers ({ onLoginSuccess }) {
     return (
         <div className="login flex w-full h-screen">
             <div className="w-full flex items-center justify-center lg:w-1/2 text-base">
-                <LoginUsuario/>
+                <LoginUsuario onLoginSuccess={onLoginSuccess} />
 
             </div>
             <div className="login_bola hidden relative lg:flex h-full w-1/2 items-center justify-center">
