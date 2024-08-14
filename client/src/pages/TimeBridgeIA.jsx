@@ -12,6 +12,7 @@ import ChatgptLogo from '../assets/chatgptLogo.jpeg';
 import { sendMsgToBackend, sendMsgToOpenAI } from '../api/openai';
 import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
+import { infoUser } from '../api/userServicesInfo.api'
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
     const [input, setInput] = useState("");
@@ -144,6 +145,33 @@ export function TimeBridgeIA () {
       setModalContent(content);
       setOpen(true);
     };
+
+
+    //recoleccion datos usuario
+    const [userInfo, setUserInfo] = useState({username: "", email: ""});
+
+useEffect(() => {
+  const fetchUserInfo = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await infoUser(config); // Pasa el objeto config como parámetro
+        setUserInfo(response);
+      } catch (error) {
+        console.error("Error fetching user info", error);
+      }
+    }
+  };
+
+  fetchUserInfo();
+}, []);
+
+
     return (
 
         <div className='App'>
@@ -191,7 +219,7 @@ export function TimeBridgeIA () {
                                       Full name
                                   </dt>
                                   <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
-                                      John Doe
+                                  {userInfo.username}
                                   </dd>
                               </div>
                               <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -199,7 +227,7 @@ export function TimeBridgeIA () {
                                       Email address
                                   </dt>
                                   <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
-                                      johndoe@example.com
+                                  {userInfo.email}
                                   </dd>
                               </div>
                               <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
