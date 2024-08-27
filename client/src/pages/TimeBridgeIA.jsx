@@ -1,4 +1,4 @@
-import '../normal.css'
+
 import '../App.css';
 import { useRef, useState, useEffect } from "react"
 import TimeLogo from '../assets/chatgptLogo.jpeg';
