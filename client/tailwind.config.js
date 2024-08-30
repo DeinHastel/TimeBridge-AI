@@ -115,7 +115,7 @@ export default {
           {}, // lg * 1.6 = xl, 8 * 1.6 = 12
       },
       ".body-1": {
-        "@apply text-[1.4rem] leading-[2.4rem] md:text-[1.6rem] md:leading-[2.8rem] lg:text-[2rem] lg:leading-12":
+        "@apply text-[1.4rem] leading-[2.4rem] md:text-[1.6rem] md:leading-[2.8rem] lg:text-[2rem] lg:leading-8":
           {}, // 0.875rem * 1.6 = 1.4rem, 1.5rem * 1.6 = 2.4rem, ...
       },
       ".body-2": {
