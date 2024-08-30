@@ -38,7 +38,7 @@ const Header = () => {
     ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}>
 
         <div className='flex items-center px-8 lg:px-12 xl:px-16 max-lg:py-6'>
-            <a className="block w-[19rem] xl:mr-12 z-50" href="#hero"> 
+            <a className="block w-[14rem] xl:mr-12 z-50" href="#hero"> 
                 <img src={ChatgptLogo} width={100} height={40} alt="BrainWave"/>
             </a>
 
