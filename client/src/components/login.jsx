@@ -1,4 +1,4 @@
-import '../normal.css'
+
 import '../App.css';
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -52,7 +52,7 @@ export function LoginUsuario({ onLoginSuccess }) {
   
 
     return(
-        <div className='bg-black px-10 py-20 rounded-3xl border-2 border-purple-700 text-white' >
+        <div className='bg-black px-10 py-20 rounded-3xl border-2 border-purple-700 text-white'>
             <h1 className='text-5xl font-semibold text-purple-700'>Bienvenido</h1>
             <p className='font-medium text-xl text-white mt-4'>Por favor ingresa tus datos.</p>
             <form className='mt-8 text-white' onSubmit={handleSubmit}>
