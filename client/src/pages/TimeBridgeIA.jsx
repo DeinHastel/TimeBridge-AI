@@ -30,7 +30,8 @@ export function TimeBridgeIA () {
 
     async function loadChats() {
         //el userId es donde debe ir el id del usuario de la session
-        const userId = 2
+        const userId = userInfo.id
+        console.log(userId)
         const res = await  getChats(userId) 
         setChats(res.data)
         console.log(res)
@@ -59,7 +60,7 @@ export function TimeBridgeIA () {
       } else {
           const nuevoChat = {
               titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
-              id_usuario: 2, // Cambiar por el ID del usuario de la sesión
+              id_usuario: userInfo.id, // Cambiar por el ID del usuario de la sesión
           };
   
           try {
@@ -148,7 +149,7 @@ export function TimeBridgeIA () {
 
 
     //recoleccion datos usuario
-    const [userInfo, setUserInfo] = useState({username: "", email: ""});
+    const [userInfo, setUserInfo] = useState({id: "", username: "", email: ""});
 
 useEffect(() => {
   const fetchUserInfo = async () => {
@@ -162,6 +163,7 @@ useEffect(() => {
         };
         const response = await infoUser(config); // Pasa el objeto config como parámetro
         setUserInfo(response);
+        console.log(response)
       } catch (error) {
         console.error("Error fetching user info", error);
       }
@@ -297,7 +299,7 @@ useEffect(() => {
 
           </div>
           <div className="chatFooter">
-            <div className="inp">
+            <div className="inp"> 
               <input className='text-xl font-medium' type="text" placeholder='Envia un mensaje...' value={input} onKeyDown={handleEnter} onChange={(e)=>{setInput(e.target.value)}}/> <button className="envio" onClick={handleSend}><img src={EnviarBtn} alt="Envio" /></button>
             </div>
             <p className='text-sm font-semibold'>Puede generar informacion inadecuada Agosto 20</p>

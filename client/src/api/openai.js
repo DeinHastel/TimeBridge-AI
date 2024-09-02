@@ -45,14 +45,14 @@ export async function sendMsgToOpenAI(message) {
   }
 }
 
-export async function sendMsgToBackend(chatId, message) {
+export async function sendMsgToBackend(chatId, rol,message) {
   try {
     // Configura la solicitud a tu backend
     const requestData = {
       chat_id: chatId,
       messages: [
         {
-          role: 'user',
+          role: rol,
           content: message,
         },
       ],

@@ -95,7 +95,7 @@ export function LoginUsuario({ onLoginSuccess }) {
                 </div>
                 <div className='text-align-center mt-4 flex justify-items-center'>
                     <p className=' text-xl'>¿no tienes usuario?    </p>
-                    <button onClick={() => { navigate('/registrate'); }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
+                    <button onClick={() => { navigate('/registrate'); }} className='font-medium text-xl text-purple-700'> Registrate aqui</button>
                 </div>
                 {/* <Link to='/timebridge'> */}
                     <div className='mt-8 flex flex-col gap-y-4'>
