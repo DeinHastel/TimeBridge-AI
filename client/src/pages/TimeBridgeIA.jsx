@@ -26,20 +26,41 @@ export function TimeBridgeIA () {
     const [selectedChat, setSelectedChat] = useState(null); // Estado para el chat seleccionado
     const [chats, setChats] = useState([]);
     
-    useEffect(()=>{ 
-
-    async function loadChats() {
-        //el userId es donde debe ir el id del usuario de la session
-        const userId = userInfo.id
-        console.log(userId)
-        const res = await  getChats(userId) 
-        setChats(res.data)
-        console.log(res)
-      }
-      loadChats();
+    useEffect(() => {
+      const fetchUserInfoAndChats = async () => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+          try {
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
+    
+            // Fetch user info
+            const userResponse = await infoUser(config);
+            setUserInfo(userResponse);
+            console.log(userResponse);
+    
+            // Fetch chats after user info is loaded
+            const userId = userResponse.id; // Usa el ID del usuario obtenido
+            console.log(userId);
+    
+            const chatResponse = await getChats(userId);
+            setChats(chatResponse.data);
+            console.log(chatResponse);
+          } catch (error) {
+            console.error("Error fetching data", error);
+          }
+        }
+      };
+    
+      fetchUserInfoAndChats();
+    
+      // Scroll to the end of the messages
       msgEnd.current.scrollIntoView();
-    },[selectedChat]);
-
+    }, [selectedChat]);
+    
     const handleSend = async () => {
       const text = input.trim(); // Eliminar espacios en blanco al inicio y al final
       if (text.length === 0) return; // No enviar mensajes vacíos
@@ -105,6 +126,16 @@ export function TimeBridgeIA () {
         console.error('Error al eliminar el chat:', error);
     }
 };
+const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
 
 
     const handleRenameChat = async (chatId) => {
@@ -134,6 +165,15 @@ export function TimeBridgeIA () {
           isBot: true, }
     ]);
     };
+
+    const handleChatNew = async () => {
+      setSelectedChat(false)
+      setMessages([
+        { text: "Hi, I am TimeBridgeAI",
+          isBot: true, }
+    ]);
+
+    };
     
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
@@ -151,28 +191,6 @@ export function TimeBridgeIA () {
     //recoleccion datos usuario
     const [userInfo, setUserInfo] = useState({id: "", username: "", email: ""});
 
-useEffect(() => {
-  const fetchUserInfo = async () => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await infoUser(config); // Pasa el objeto config como parámetro
-        setUserInfo(response);
-        console.log(response)
-      } catch (error) {
-        console.error("Error fetching user info", error);
-      }
-    }
-  };
-
-  fetchUserInfo();
-}, []);
-
 
     return (
 
@@ -180,10 +198,10 @@ useEffect(() => {
         <div className='menucostado'>
           <div className="arribaCostado">
             <div className="arribaCostadoEncima"><img src={TimeLogo} alt="Logo" className="logo" /><span className="marca">TimeBridgeAI</span></div>
-            <button className="botonMedio" onClick={()=>{window.location.reload()}}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
+            <button className="botonMedio" onClick={handleChatNew}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
             <div className="arribaCostadoDebajo">
             {chats.map(chat => (
-                <div key={chat.id_chat} className={`flex items-center justify-start w-full px-1 py-2 rounded-md mb-2 text-2xl
+                <div key={chat.id_chat} className={`flex items-center justify-between w-full px-1 py-2 rounded-md mb-2 text-2xl
                   ${selectedChat === chat.id_chat ? 'bg-teal-600 text-black' : 'hover:bg-teal-500'}
                             `}>
                                 <button
@@ -194,13 +212,16 @@ useEffect(() => {
                                     <span className="ml-2">{chat.titulo}</span>
                                 </button>
                                 <div className="dropdown">
-                                    <button className="dropbtn">⋮</button>
+                                  <button className="dropbtn px-3" onClick={toggleDropdown}>⋮</button>
+                                  {isOpen && (
                                     <div className="dropdown-content">
-                                        <button className='block px-3 py-2 text-m text-gray-700' onClick={() => handleRenameChat(chat.id_chat)}>Renombrar</button>
-                                        <button className='block px-3 py-2 text-m text-gray-700' onClick={() => handleDeleteChat(chat.id_chat)}>Eliminar</button>
+                                      <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleRenameChat(chat.id_chat); closeDropdown(); }}>Renombrar</button>
+                                      <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleDeleteChat(chat.id_chat); closeDropdown(); }}>Eliminar</button>
                                     </div>
+                                  )}
                                 </div>
-                            </div>
+
+                    </div>
               ))}
             </div>
 

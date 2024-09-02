@@ -21,7 +21,6 @@ export function LoginUsuario({ onLoginSuccess }) {
       ...formData,
       [e.target.name]: e.target.value
     });
-    console.log(formData)
   };
 
   const handleSubmit = async (e) => {
@@ -37,7 +36,6 @@ export function LoginUsuario({ onLoginSuccess }) {
 
       onLoginSuccess(data.username);
       navigate('/timebridge')
-      console.log(data)
 
     }
 
