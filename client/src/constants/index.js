@@ -39,17 +39,17 @@ import {
   export const navigation = [
     {
       id: "0",
-      title: "Features",
+      title: "Caracteristicas",
       url: "#features",
     },
     {
       id: "1",
-      title: "Pricing",
+      title: "Precios",
       url: "#pricing",
     },
     {
       id: "2",
-      title: "How to use",
+      title: "Como usar",
       url: "#how-to-use",
     },
     {
@@ -244,16 +244,16 @@ import {
   export const benefits = [
     {
       id: "0",
-      title: "Ask anything",
-      text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+      title: "Pregunta Todo",
+      text: "Permite a los usuarios encontrar rápidamente respuestas a sus preguntas sin tener que buscar en múltiples fuentes.",
       backgroundUrl: "./src/assets/benefits/card-1.svg",
       iconUrl: benefitIcon1,
       imageUrl: benefitImage2,
     },
     {
       id: "1",
-      title: "Improve everyday",
-      text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+      title: "Mejora cada dia",
+      text: "La aplicación utiliza procesamiento de lenguaje natural para comprender las consultas de los usuarios y brindar respuestas precisas y relevantes.",
       backgroundUrl: "./src/assets/benefits/card-2.svg",
       iconUrl: benefitIcon2,
       imageUrl: benefitImage2,
@@ -261,16 +261,16 @@ import {
     },
     {
       id: "2",
-      title: "Connect everywhere",
-      text: "Connect with the AI chatbot from anywhere, on any device, making it more accessible and convenient.",
+      title: "En todo lugar",
+      text: "Conéctese con el chatbot de IA desde cualquier lugar y en cualquier dispositivo, haciéndolo más accesible y conveniente",
       backgroundUrl: "./src/assets/benefits/card-3.svg",
       iconUrl: benefitIcon3,
       imageUrl: benefitImage2,
     },
     {
       id: "3",
-      title: "Fast responding",
-      text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+      title: "Respuestas rapidas",
+      text: "Permite a los usuarios encontrar rápidamente respuestas a sus preguntas sin tener que buscar en múltiples fuentes",
       backgroundUrl: "./src/assets/benefits/card-4.svg",
       iconUrl: benefitIcon4,
       imageUrl: benefitImage2,
@@ -278,16 +278,16 @@ import {
     },
     {
       id: "4",
-      title: "Ask anything",
-      text: "Lets users quickly find answers to their questions without having to search through multiple sources.",
+      title: "Se especialista",
+      text: "Los usuarios podran aprender sobre python y conocer todas las posibilidades con el chatbot de AI.",
       backgroundUrl: "./src/assets/benefits/card-5.svg",
       iconUrl: benefitIcon1,
       imageUrl: benefitImage2,
     },
     {
       id: "5",
-      title: "Improve everyday",
-      text: "The app uses natural language processing to understand user queries and provide accurate and relevant responses.",
+      title: "Explora",
+      text: "La aplicacion brindara las mejores opciones para tus preguntas mas frecuentes sobre programacion.",
       backgroundUrl: "./src/assets/benefits/card-6.svg",
       iconUrl: benefitIcon2,
       imageUrl: benefitImage2,

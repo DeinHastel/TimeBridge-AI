@@ -1,5 +1,6 @@
 import '../Landing.css';
 import ButtonGradient from '../assets/svg/ButtonGradient'
+import Benefits from '../components/Benefits';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
@@ -11,6 +12,7 @@ export function LandingPage() {
             <div className="pt-[7.6rem] lg:pt-[8.4rem] overflow-hidden">
                 <Header/>
                 <Hero/>
+                <Benefits/>
             </div>
             <ButtonGradient/>
             

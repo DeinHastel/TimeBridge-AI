@@ -119,7 +119,7 @@ export default {
           {}, // 0.875rem * 1.6 = 1.4rem, 1.5rem * 1.6 = 2.4rem, ...
       },
       ".body-2": {
-        "@apply font-light text-[1.4rem] leading-9.6 md:text-base":
+        "@apply font-light text-[1.4rem] leading-6 md:text-base":
           {}, // 0.875rem * 1.6 = 1.4rem, 6 * 1.6 = 9.6
       },
       ".caption": {
