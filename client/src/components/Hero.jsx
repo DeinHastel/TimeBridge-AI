@@ -37,7 +37,7 @@ const Hero = () => {
                 <p className="body-1 max-w-5xl mx-auto mb-6 text-n-2 lg:mb-8 pt-2">Desata el poder de la IA con TimeBridge.
                     Mejora tu productivdad Con TimeBridge, la aplicacion abierta para IA 
                 </p>
-                <Button href="/pricing" white>
+                <Button href="/login" white>
                     Comienza
                 </Button>
             </div>
