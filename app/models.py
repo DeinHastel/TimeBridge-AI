@@ -39,6 +39,7 @@ class Chats(models.Model):
 
 class Conversacion(models.Model):
     id_conversacion = models.AutoField(primary_key=True)
+    rol = models.CharField(max_length=10)
     texto = models.TextField()
     id_chat = models.ForeignKey(Chats, on_delete=models.CASCADE)
     fecha_conversacion = models.DateTimeField(auto_now_add=True)

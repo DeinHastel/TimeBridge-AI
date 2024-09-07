@@ -67,18 +67,10 @@ export function TimeBridgeIA () {
   
       setInput(''); // Limpiar el input después de obtener el texto
   
-      if (selectedChat) {
-          try {
-              const response = await sendMsgToOpenAI(text);
-              setMessages([
-                  ...messages,
-                  { text, isBot: "user" },
-                  { text: response, isBot: "bot" }
-              ]);
-          } catch (error) {
-              console.error('Error al enviar el mensaje:', error);
-          }
-      } else {
+      let chatId = selectedChat;
+  
+      // Si no hay un chat seleccionado, creamos uno nuevo antes de enviar el mensaje
+      if (!chatId) {
           const nuevoChat = {
               titulo: text.length > 30 ? text.substring(0, 30) : text, // Limitar el título a 30 caracteres
               id_usuario: userInfo.id, // Cambiar por el ID del usuario de la sesión
@@ -87,27 +79,35 @@ export function TimeBridgeIA () {
           try {
               const res = await Insertarchats(nuevoChat);
               const createdChat = res.data;
-            
+              
               // Actualizar el estado de los chats y seleccionar el chat recién creado
               setChats([...chats, createdChat]);
-              handleChatSelect(createdChat.id_chat);
-  
-              setMessages([
-                  ...messages,
-                  { text, isBot: false }
-              ]);
-  
-              const response = await sendMsgToOpenAI(text);
-              setMessages([
-                  ...messages,
-                  { text, isBot: "user" },
-                  { text: response, isBot: "bot" }
-              ]);
+              chatId = createdChat.id_chat; // Asignar el ID del nuevo chat
+              setSelectedChat(chatId);
           } catch (error) {
               console.error('Error al crear y guardar el nuevo chat:', error);
+              return; // Salir si hay un error al crear el chat
           }
       }
+  
+      // Ahora enviamos el mensaje al backend
+      try {
+          setMessages([
+              ...messages,
+              { text, isBot: "user" },
+          ]);
+  
+          const response = await sendMsgToBackend(chatId, text);
+          
+          setMessages(prevMessages => [
+              ...prevMessages,
+              { text: response, isBot: "bot" }
+          ]);
+      } catch (error) {
+          console.error('Error al enviar el mensaje:', error);
+      }
   };
+  
   const handleDeleteChat = async (chatId) => {
     const confirmed = window.confirm("¿Quieres borrar el chat?");
     if (!confirmed) return;

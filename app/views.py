@@ -92,22 +92,32 @@ class ConversacionView(viewsets.ViewSet):
         
         try:
             new_messages = []
+            
+            # Asegúrate de que el chat existe
+            chat = Chats.objects.get(id_chat=chat_id)
+            
+            # Procesar los mensajes recibidos
             for msg in messages:
                 role = msg.get('role')
                 content = msg.get('content')
                 
-                # Crear la instancia de Conversacion
-                chat = Chats.objects.get(id_chat=chat_id)
+                # Crear la instancia de Conversacion para cada mensaje
                 new_message = Conversacion.objects.create(
                     rol=role,
                     texto=content,
                     id_chat=chat
                 )
                 new_messages.append(new_message)
-            
+
             # Serializar y devolver la respuesta
             serializer = ConversacionSerializer(new_messages, many=True)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Chats.DoesNotExist:
+            return Response({'error': 'Chat no encontrado'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
         except Chats.DoesNotExist:
             return Response({'error': 'Chat no encontrado'}, status=status.HTTP_404_NOT_FOUND)

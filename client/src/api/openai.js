@@ -21,7 +21,6 @@ export async function sendMsgToOpenAI(message) {
     };
 
     // Realiza la solicitud a la API de OpenAI usando Axios
-    //console.log(requestData)
     const response = await axios.post(apiUrlopenai, requestData, {
       headers: {
         'Content-Type': 'application/json',
@@ -30,11 +29,9 @@ export async function sendMsgToOpenAI(message) {
     });
 
     // Devuelve el texto generado
-    //console.log(response.data)
     return response.data.choices[0].text;
   } catch (error) {
     if (error.response) {
-      
       console.error('Error al realizar la solicitud a la API de OpenAI:', error.response.data);
     } else if (error.request) {
       console.error('No se recibió respuesta de la API de OpenAI:', error.request);
@@ -45,32 +42,39 @@ export async function sendMsgToOpenAI(message) {
   }
 }
 
-export async function sendMsgToBackend(chatId, rol,message) {
+export async function sendMsgToBackend(chatId, message) {
   try {
-    // Configura la solicitud a tu backend
+    // Primero, obtenemos la respuesta de OpenAI
+    const openAiResponse = await sendMsgToOpenAI(message);
+
+    // Ahora enviamos el mensaje original y la respuesta de OpenAI al backend
     const requestData = {
       chat_id: chatId,
       messages: [
         {
-          role: rol,
-          content: message,
+          role: "user",   // El rol podría ser 'usuario' o 'bot', dependiendo del flujo
+          content: message,  // Mensaje original
+        },
+        {
+          role: 'bot',   // Aquí el rol se define como bot para la respuesta de OpenAI
+          content: openAiResponse,  // Respuesta generada por OpenAI
         },
       ],
     };
 
-    // Realiza la solicitud a tu backend usando Axios
+    // Realizamos la solicitud a tu backend
     const response = await axios.post(apiUrl, requestData, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    // Devuelve el texto generado por el bot
-    return sendMsgToOpenAI(message)
+    // Devuelve la respuesta de tu backend, si es necesario
+    return openAiResponse;
 
   } catch (error) {
     if (error.response) {
-      console.error('Error al realizar la solicitud a tu backend:', response.data);
+      console.error('Error al realizar la solicitud a tu backend:', error.response.data);
     } else if (error.request) {
       console.error('No se recibió respuesta de tu backend:', error.request);
     } else {
@@ -78,5 +82,4 @@ export async function sendMsgToBackend(chatId, rol,message) {
     }
     throw new Error('Error al procesar la solicitud a tu backend');
   }
-  
 }
