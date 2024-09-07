@@ -78,9 +78,9 @@ import {
   export const companyLogos = [yourlogo, yourlogo, yourlogo, yourlogo, yourlogo];
   
   export const brainwaveServices = [
-    "Photo generating",
-    "Photo enhance",
-    "Seamless Integration",
+    "Generacion de codigo",
+    "Mejoras de codigo",
+    "Optimizacion de tiempo",
   ];
   
   export const brainwaveServicesIcons = [
