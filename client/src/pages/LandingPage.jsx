@@ -4,6 +4,7 @@ import Benefits from '../components/Benefits';
 import Button from '../components/Button';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import Pricing from '../components/Pricing';
 import Services from '../components/Services';
 
 export function LandingPage() {
@@ -15,6 +16,7 @@ export function LandingPage() {
                 <Hero/>
                 <Benefits/>
                 <Services/>
+                <Pricing/>
             </div>
             <ButtonGradient/>
             
