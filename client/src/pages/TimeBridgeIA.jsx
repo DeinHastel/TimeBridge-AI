@@ -19,7 +19,7 @@ export function TimeBridgeIA () {
     const [messages, setMessages ] = useState([
       {
         text: "Hi, I am TimeBridgeAI",
-        isBot: true,
+        isBot: "bot",
       }
     ]);
 
@@ -72,8 +72,8 @@ export function TimeBridgeIA () {
               const response = await sendMsgToOpenAI(text);
               setMessages([
                   ...messages,
-                  { text, isBot: false },
-                  { text: response, isBot: true }
+                  { text, isBot: "user" },
+                  { text: response, isBot: "bot" }
               ]);
           } catch (error) {
               console.error('Error al enviar el mensaje:', error);
@@ -100,8 +100,8 @@ export function TimeBridgeIA () {
               const response = await sendMsgToOpenAI(text);
               setMessages([
                   ...messages,
-                  { text, isBot: false },
-                  { text: response, isBot: true }
+                  { text, isBot: "user" },
+                  { text: response, isBot: "bot" }
               ]);
           } catch (error) {
               console.error('Error al crear y guardar el nuevo chat:', error);
@@ -120,7 +120,7 @@ export function TimeBridgeIA () {
         // Si el chat seleccionado es el que se está eliminando, limpiar la selección
         if (selectedChat === chatId) {
             setSelectedChat(null);
-            setMessages([{ text: "Hi, I am TimeBridgeAI", isBot: true }]); // Limpiar mensajes si se elimina el chat seleccionado
+            setMessages([{ text: "Hi, I am TimeBridgeAI", isBot: "bot" }]); // Limpiar mensajes si se elimina el chat seleccionado
         }
     } catch (error) {
         console.error('Error al eliminar el chat:', error);
@@ -162,7 +162,7 @@ const [isOpen, setIsOpen] = useState(false);
       setSelectedChat(chatId);
       setMessages([
         { text: "Hi, I am TimeBridgeAI",
-          isBot: true, }
+          isBot: "bot", }
     ]);
     };
 
@@ -170,7 +170,7 @@ const [isOpen, setIsOpen] = useState(false);
       setSelectedChat(false)
       setMessages([
         { text: "Hi, I am TimeBridgeAI",
-          isBot: true, }
+          isBot: "bot", }
     ]);
 
     };
@@ -312,8 +312,8 @@ const [isOpen, setIsOpen] = useState(false);
         <div className="principal">
           <div className="chats text-xl font-medium">
             {messages.map((message, i) => 
-              <div key={i} className={message.isBot?"chat bot":"chat"}>
-                <img className='chatImg' src={message.isBot?ChatgptLogo:IconoUsuario} alt="" /><p className="txt">{message.text}</p>
+              <div key={i} className={message.isBot=="bot"?"chat bot":"chat"}>
+                <img className='chatImg' src={message.isBot=="bot"?ChatgptLogo:IconoUsuario} alt="" /><p className="txt">{message.text}</p>
               </div>
             )}
             <div ref={msgEnd}/>  
