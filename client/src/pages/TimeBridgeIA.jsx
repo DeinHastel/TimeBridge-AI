@@ -12,6 +12,7 @@ import ChatgptLogo from '../assets/chatgptLogo.jpeg';
 import { sendMsgToBackend, sendMsgToOpenAI } from '../api/openai';
 import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
+import { getConversacion } from '../api/conversacion.api';
 import { infoUser } from '../api/userServicesInfo.api'
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
@@ -160,10 +161,21 @@ const [isOpen, setIsOpen] = useState(false);
     const handleChatSelect = (chatId) => {
       console.log(`Chat seleccionado: ${chatId}`); // Agregar log para depuración
       setSelectedChat(chatId);
-      setMessages([
-        { text: "Hi, I am TimeBridgeAI",
-          isBot: "bot", }
-    ]);
+      getConversacion(chatId)
+        .then(response => {
+          console.log(response)
+            const fetchedMessages = response.data.map(conversation => ({
+                text: conversation.texto, // O el campo que tengas en tu respuesta de la API
+                isBot: conversation.rol === 'bot' ? 'bot' : 'user', // Ajustar según sea 'bot' o 'user'
+            }));
+
+            // Actualizar los mensajes en el estado
+            setMessages(fetchedMessages);
+        })
+        .catch(error => {
+            console.error('Error fetching conversations:', error);
+        });
+
     };
 
     const handleChatNew = async () => {

@@ -84,7 +84,17 @@ class RolView(viewsets.ModelViewSet):
     serializer_class = RolSerializer
     queryset = Rol.objects.all()
     
-class ConversacionView(viewsets.ViewSet):
+class ConversacionView(viewsets.ModelViewSet):
+    serializer_class = ConversacionSerializer
+
+    def get_queryset(self):
+        queryset = Conversacion.objects.all()
+        chat_id = self.request.query_params.get('chat_id')  # Obtén el chat_id de los parámetros
+        if chat_id:
+            queryset = queryset.filter(id_chat=chat_id)  # Filtra por el id_chat
+        return queryset
+
+
     def create(self, request):
         # Obtener los datos del cuerpo de la solicitud POST
         chat_id = request.data.get('chat_id')
