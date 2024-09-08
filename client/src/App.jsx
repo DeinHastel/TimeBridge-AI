@@ -69,7 +69,7 @@ function App() {
         />
         <Route path="/registrate" element={<FormRegistro />} />
         <Route path="/landing" element={<LandingPage />} />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/landing" />} />
         <Route
           path="/timebridge"
           element={
