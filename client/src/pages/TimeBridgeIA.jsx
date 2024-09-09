@@ -262,8 +262,8 @@ const [isOpen, setIsOpen] = useState(false);
             <button className="botonMedio" onClick={handleChatNew}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
             <div className="arribaCostadoDebajo">
             {chats.map(chat => (
-                <div key={chat.id_chat} className={`flex items-center justify-between w-full px-1 py-2 rounded-md mb-2 text-2xl
-                  ${selectedChat === chat.id_chat ? 'bg-teal-600 text-black' : 'hover:bg-teal-500'}
+                <div key={chat.id_chat} className={`flex items-center justify-between w-full px-1 py-2 rounded-2xl mb-2 text-2xl
+                  ${selectedChat === chat.id_chat ? 'bg-n-13 text-black' : 'hover:bg-n-14'}
                             `}>
                                 <button
                                     className="flex items-center justify-start w-full"
@@ -273,10 +273,10 @@ const [isOpen, setIsOpen] = useState(false);
                                     <span className="ml-2">{chat.titulo}</span>
                                 </button>
                                 <div className="dropdown">
-                                  <button className="dropbtn px-3" onClick={toggleDropdown}>⋮</button>
+                                  <button className="dropbtn px-3 rounded-3xl justify-center text-center" onClick={toggleDropdown}>⋮</button>
                                   {isOpen && (
                                     <div className="dropdown-content">
-                                      <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleRenameChat(chat.id_chat); closeDropdown(); }}>Renombrar</button>
+                                      <button className='button block px-3 py-2 text-m text-gray-700 ' onClick={() => { handleRenameChat(chat.id_chat); closeDropdown(); }}>Renombrar</button>
                                       <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleDeleteChat(chat.id_chat); closeDropdown(); }}>Eliminar</button>
                                     </div>
                                   )}
@@ -332,6 +332,7 @@ const [isOpen, setIsOpen] = useState(false);
                       <Gradient/>
                   </div>
                   </div>
+                  <Gradient/>
                   
                 </div>
                 
@@ -352,13 +353,15 @@ const [isOpen, setIsOpen] = useState(false);
                   <div className='relative'>
                     <div class="relative justify-center z-1 flex items-center h-[20rem] 
                       mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
-                        <div id='btns-paypal' className='flex flex-col'>
-                          <p className='parrafoModal'>Valor de la suscripcion 2 USD</p>
+                        <div id='btns-paypal' className='flex flex-col pb-3'>
+                          <p className='parrafoModal pb-10'>Valor de la suscripcion 10 USD</p>
+                          
                           <Button white onClick={initPaypal}>Comprar</Button>
                         </div>
                         <Gradient/>
                     </div>
                   </div>
+                  <Gradient/>
                 </div>
                 </Section>
               )

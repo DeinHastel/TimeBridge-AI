@@ -33,7 +33,7 @@ def create_order(productos):
                 {
                     "amount":{
                         "currency_code":"USD",
-                        "value":"2"
+                        "value":"10"
                     }
                 }
             ]

@@ -221,7 +221,7 @@ import {
       id: "1",
       title: "Premium",
       description: "Chatbot de IA avanzado, soporte prioritario, sin limite en espacio",
-      price: "70.000",
+      price: "40.000",
       features: [
         "Un chatbot de IA avanzado que puede comprender consultas complejas",
         "Un registro de tus conversaciones sin limite",
