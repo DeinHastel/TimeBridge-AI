@@ -1,9 +1,11 @@
-import { loadScript } from "@paypal/paypal-js"
+
 import { useEffect } from "react";
+import { loadScript } from "@paypal/paypal-js"
 import { apiCreateOrderPaypal } from "../api/paypal";
 import { apiOnApprovePaypal } from "../api/paypal";
 
 const PaypalComponent =()=>{
+    
     let paypal;
     const initPaypal = async() =>{
         
@@ -45,7 +47,6 @@ const PaypalComponent =()=>{
 
     return(
         <div>
-            
             <div id="btns-paypal">
                 aqui cosas de paypal
             </div>

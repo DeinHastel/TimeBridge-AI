@@ -14,6 +14,9 @@ import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
 import { getConversacion } from '../api/conversacion.api';
 import { infoUser } from '../api/userServicesInfo.api'
+import { loadScript } from "@paypal/paypal-js"
+import { apiCreateOrderPaypal } from "../api/paypal";
+import { apiOnApprovePaypal } from "../api/paypal";
 import Section from '../components/Section';
 import Heading from '../components/Heading';
 import { Gradient } from '../components/design/Services';
@@ -64,6 +67,10 @@ export function TimeBridgeIA () {
     
       // Scroll to the end of the messages
       msgEnd.current.scrollIntoView();
+
+      ()=>{
+        initPaypal()
+      }
     }, [selectedChat]);
     
     const handleSend = async () => {
@@ -190,7 +197,45 @@ const [isOpen, setIsOpen] = useState(false);
     ]);
 
     };
-    
+    let paypal;
+    const initPaypal = async() =>{
+        
+        try {
+            paypal = await loadScript({ clientId: "test" });
+        } catch (error) {
+            console.error("failed to load the PayPal JS SDK script", error);
+        }
+
+        if (paypal) {
+            try {
+                await paypal.Buttons({
+                    style: {
+                        layout: 'vertical',
+                        color:  'blue',
+                        shape:  'rect',
+                        label:  'paypal'
+                      },
+                      async createOrder(){
+                        const idOrder = apiCreateOrderPaypal()
+                        return idOrder
+                      },
+                      async onApprove(data){
+                        console.log("en el componente ",data)
+                        const details = await apiOnApprovePaypal(data)
+                        alert(`Transaction completed by ${details.payer.name.given_name}`);
+                      }
+                }).render("#btns-paypal");
+            } catch (error) {
+                console.error("failed to render the PayPal Buttons", error);
+            }
+        }
+
+    }
+    useEffect(
+        ()=>{
+            initPaypal()
+        },[])
+
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
@@ -307,9 +352,9 @@ const [isOpen, setIsOpen] = useState(false);
                   <div className='relative'>
                     <div class="relative justify-center z-1 flex items-center h-[20rem] 
                       mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
-                        <div className='flex flex-col'>
-                          <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
-                          <Button white onClick={() => setOpen(true)} >Comprar</Button>
+                        <div id='btns-paypal' className='flex flex-col'>
+                          <p className='parrafoModal'>Valor de la suscripcion 2 USD</p>
+                          <Button white onClick={initPaypal}>Comprar</Button>
                         </div>
                         <Gradient/>
                     </div>
