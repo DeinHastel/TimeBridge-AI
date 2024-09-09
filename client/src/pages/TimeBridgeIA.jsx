@@ -14,6 +14,10 @@ import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
 import { getConversacion } from '../api/conversacion.api';
 import { infoUser } from '../api/userServicesInfo.api'
+import Section from '../components/Section';
+import Heading from '../components/Heading';
+import { Gradient } from '../components/design/Services';
+import Button from '../components/Button';
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
     const [input, setInput] = useState("");
@@ -241,17 +245,22 @@ const [isOpen, setIsOpen] = useState(false);
           <div className="abajoCostado">
           <button className="listaItems" onClick={() => handleClick(Casa, "",{
               content: (
-                <div>
-                  <h3 className="text-white text-2xl font-semibold"> Informacion del usuario</h3>
-                  <br />
+                <Section>
+                  <Heading
+                  className="text-center h2" 
+                  title="Informacion del usuario"
+                  />
+                <div className='container'>
                   {/* Aqui pondremos la informacion del usuario */}
-                    <div class="bg-gray-700 overflow-hidden shadow rounded-lg border">
+                  <div className='relative'>
+                    <div class="relative justify-center z-1 flex items-center h-[20rem] 
+                    mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
                       
-                      <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                      <div class="border-t px-4 py-5 sm:p-0">
                           <dl class="sm:divide-y sm:divide-gray-200">
                               <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                   <dt class="text-xl font-medium text-white">
-                                      Full name
+                                      Nombre
                                   </dt>
                                   <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
                                   {userInfo.username}
@@ -259,7 +268,7 @@ const [isOpen, setIsOpen] = useState(false);
                               </div>
                               <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                   <dt class="text-xl font-medium text-white">
-                                      Email address
+                                      Correo
                                   </dt>
                                   <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
                                   {userInfo.email}
@@ -267,25 +276,21 @@ const [isOpen, setIsOpen] = useState(false);
                               </div>
                               <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                                   <dt class="text-xl font-medium text-white">
-                                      Phone number
+                                      Fecha de ingreso
                                   </dt>
                                   <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
-                                      (123) 456-7890
-                                  </dd>
-                              </div>
-                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                  <dt class="text-xl font-medium text-white">
-                                      Address
-                                  </dt>
-                                  <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
-                                      123 Main St
-                                      Anytown, USA 12345
+                                  {userInfo.date_joined}
                                   </dd>
                               </div>
                           </dl>
                       </div>
+                      <Gradient/>
                   </div>
+                  </div>
+                  
                 </div>
+                
+                </Section>
               )
             })}>
               <img src={Casa} alt="" className="listaItemsImg" />Perfil
@@ -293,11 +298,24 @@ const [isOpen, setIsOpen] = useState(false);
 
           <button className="listaItems" onClick={() => handleClick(Cohete, "",{
               content: (
-                <div>
-                  <h3 className="text-white text-2xl font-semibold">Mejora a Pro</h3>
-                  <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
-                  <button onClick={() => setOpen(true)} className='bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded'>Comprar</button>
+                <Section>
+                  <Heading
+                  className="text-center h2" 
+                  title="Mejora a pro"
+                  />
+                <div className='container'>
+                  <div className='relative'>
+                    <div class="relative justify-center z-1 flex items-center h-[20rem] 
+                      mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
+                        <div className='flex flex-col'>
+                          <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
+                          <Button white onClick={() => setOpen(true)} >Comprar</Button>
+                        </div>
+                        <Gradient/>
+                    </div>
+                  </div>
                 </div>
+                </Section>
               )
             })}>
               <img src={Cohete} alt="" className="listaItemsImg" />Mejora a pro

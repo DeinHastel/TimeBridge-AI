@@ -1,10 +1,11 @@
 // npm install feather-icons-react
 import { XCircle } from 'feather-icons-react';
-
+import { BackgroundCircles} from './design/Header';
 
 export default function Modal({open, onClose, title, children}){
     return(
         //Fondo
+        
         <div onClick={onClose} className={`fixed inset-0 flex items-center justify-center
         transition-colors first-letter ${open ? "visible bg-black/20" : "invisible"}`}>
 
@@ -12,7 +13,7 @@ export default function Modal({open, onClose, title, children}){
             <div
             onClick={(e) => e.stopPropagation()}
             className={`
-            bg-gray-700 rounded-xl shadow p-6 transition-all 
+            bg-n-15/15 rounded-3xl shadow p-6 transition-all 
             w-2/4 h-3./4
             ${open ? "scale-100 opacity-200" : "scale-125 opacity-0 "}`}>
 
@@ -20,7 +21,7 @@ export default function Modal({open, onClose, title, children}){
             <button
             onClick={onClose} 
             className="absolute top-2 right-2 p-1 rounded-lg
-            text-white bg-gray-700 hover:bg-gray-50
+            text-white bg-n-7 hover:bg-gray-50
             hover:text-gray-500"> 
                 <XCircle size={18} />
             </button>
@@ -30,9 +31,12 @@ export default function Modal({open, onClose, title, children}){
 
             {/* Contenido */}
             {children}
+            <BackgroundCircles/>
+            
             </div>
 
         </div>
+        
 
     )
 }
