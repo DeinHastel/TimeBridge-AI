@@ -11,14 +11,35 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 
+from rest_framework.views import APIView
+
 from django.contrib.auth import authenticate
 from .serializer import UserLoginSerializer, UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
 from .models import User,Contraseña,Rol,Conversacion,Compras,Chats
 from .serializer import UserRegistrationSerializer
+from .functions import create_order, generateAccesToken, capture_order
 from app import serializer
 
 # Create your views here.
 
+class CrearOrden(APIView):
+    def post(self,request):
+        order = create_order("Productos")
+        return Response(order, status=status.HTTP_200_OK)
+    
+class CapturarOrderPaypal(APIView):
+    def post(self, request, *args, **kwargs):
+        print("====D", request.data)
+        try:
+            order_id = request.data['orderID']
+            response = capture_order(order_id)
+            print(response)
+            return Response(response, status.HTTP_200_OK)
+        except:
+            print(error)
+            return Response({"error":'error aqui'}, status.HTTP_400_BAD_REQUEST)
+        
+        
 class UserRegistrationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
