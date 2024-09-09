@@ -14,6 +14,9 @@ import Modal from '../components/Modal';
 import { getChats, Insertarchats, deleteChat, updateChat } from "../api/chat.api";
 import { getConversacion } from '../api/conversacion.api';
 import { infoUser } from '../api/userServicesInfo.api'
+import { loadScript } from "@paypal/paypal-js"
+import { apiCreateOrderPaypal } from "../api/paypal";
+import { apiOnApprovePaypal } from "../api/paypal";
 import Section from '../components/Section';
 import Heading from '../components/Heading';
 import { Gradient } from '../components/design/Services';
@@ -64,6 +67,10 @@ export function TimeBridgeIA () {
     
       // Scroll to the end of the messages
       msgEnd.current.scrollIntoView();
+
+      ()=>{
+        initPaypal()
+      }
     }, [selectedChat]);
     
     const handleSend = async () => {
@@ -190,7 +197,45 @@ const [isOpen, setIsOpen] = useState(false);
     ]);
 
     };
-    
+    let paypal;
+    const initPaypal = async() =>{
+        
+        try {
+            paypal = await loadScript({ clientId: "test" });
+        } catch (error) {
+            console.error("failed to load the PayPal JS SDK script", error);
+        }
+
+        if (paypal) {
+            try {
+                await paypal.Buttons({
+                    style: {
+                        layout: 'vertical',
+                        color:  'blue',
+                        shape:  'rect',
+                        label:  'paypal'
+                      },
+                      async createOrder(){
+                        const idOrder = apiCreateOrderPaypal()
+                        return idOrder
+                      },
+                      async onApprove(data){
+                        console.log("en el componente ",data)
+                        const details = await apiOnApprovePaypal(data)
+                        alert(`Transaction completed by ${details.payer.name.given_name}`);
+                      }
+                }).render("#btns-paypal");
+            } catch (error) {
+                console.error("failed to render the PayPal Buttons", error);
+            }
+        }
+
+    }
+    useEffect(
+        ()=>{
+            initPaypal()
+        },[])
+
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
     const [modalTitle, setModalTitle] = useState("");
@@ -217,8 +262,8 @@ const [isOpen, setIsOpen] = useState(false);
             <button className="botonMedio" onClick={handleChatNew}><img src={AggBtn} alt="" className="botonAgg" />Nuevo chat</button>
             <div className="arribaCostadoDebajo">
             {chats.map(chat => (
-                <div key={chat.id_chat} className={`flex items-center justify-between w-full px-1 py-2 rounded-md mb-2 text-2xl
-                  ${selectedChat === chat.id_chat ? 'bg-teal-600 text-black' : 'hover:bg-teal-500'}
+                <div key={chat.id_chat} className={`flex items-center justify-between w-full px-1 py-2 rounded-2xl mb-2 text-2xl
+                  ${selectedChat === chat.id_chat ? 'bg-n-13 text-black' : 'hover:bg-n-14'}
                             `}>
                                 <button
                                     className="flex items-center justify-start w-full"
@@ -228,10 +273,10 @@ const [isOpen, setIsOpen] = useState(false);
                                     <span className="ml-2">{chat.titulo}</span>
                                 </button>
                                 <div className="dropdown">
-                                  <button className="dropbtn px-3" onClick={toggleDropdown}>⋮</button>
+                                  <button className="dropbtn px-3 rounded-3xl justify-center text-center" onClick={toggleDropdown}>⋮</button>
                                   {isOpen && (
                                     <div className="dropdown-content">
-                                      <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleRenameChat(chat.id_chat); closeDropdown(); }}>Renombrar</button>
+                                      <button className='button block px-3 py-2 text-m text-gray-700 ' onClick={() => { handleRenameChat(chat.id_chat); closeDropdown(); }}>Renombrar</button>
                                       <button className='button block px-3 py-2 text-m text-gray-700' onClick={() => { handleDeleteChat(chat.id_chat); closeDropdown(); }}>Eliminar</button>
                                     </div>
                                   )}
@@ -287,6 +332,7 @@ const [isOpen, setIsOpen] = useState(false);
                       <Gradient/>
                   </div>
                   </div>
+                  <Gradient/>
                   
                 </div>
                 
@@ -307,13 +353,15 @@ const [isOpen, setIsOpen] = useState(false);
                   <div className='relative'>
                     <div class="relative justify-center z-1 flex items-center h-[20rem] 
                       mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
-                        <div className='flex flex-col'>
-                          <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
-                          <Button white onClick={() => setOpen(true)} >Comprar</Button>
+                        <div id='btns-paypal' className='flex flex-col pb-3'>
+                          <p className='parrafoModal pb-10'>Valor de la suscripcion 10 USD</p>
+                          
+                          <Button white onClick={initPaypal}>Comprar</Button>
                         </div>
                         <Gradient/>
                     </div>
                   </div>
+                  <Gradient/>
                 </div>
                 </Section>
               )

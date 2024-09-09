@@ -29,6 +29,7 @@ body{
 /* styles.css */
 .dropdown {
   display: inline-block;
+  border-radius: 100px;
 }
 
 .dropdown-content {
@@ -58,7 +59,8 @@ body{
 }
 
 .dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+  background-color: #b6ac1b;
+  border: radius 100px;;
 }
 
 .App {

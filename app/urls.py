@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from .views import UsuarioView,ContraseñaView,RolView,ConversacionView,ComprasView,ChatsView
-from .views import UserRegistrationAPIView, UserLoginAPIView, UserLogoutAPIView, UserInfoAPIView
+from .views import UserRegistrationAPIView, UserLoginAPIView, UserLogoutAPIView, UserInfoAPIView, CrearOrden, CapturarOrderPaypal
 from rest_framework_simplejwt.views import TokenRefreshView
 
 router = routers.DefaultRouter()
@@ -19,5 +19,7 @@ urlpatterns = [
     path("pagina/v1/logout/", UserLogoutAPIView.as_view(), name='logout'),
     path("pagina/v1/token/refresh/", TokenRefreshView.as_view(), name='token-refresh'),
     path("pagina/v1/userinfo/", UserInfoAPIView.as_view(), name='User_info'),
+    path("api/orders/", CrearOrden.as_view(),),
+    path("api/orders/capture/", CapturarOrderPaypal.as_view(),),
     
 ] 

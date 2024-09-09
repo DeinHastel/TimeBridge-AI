@@ -9,6 +9,7 @@ import { FormUsers } from "./pages/FormUsers";
 import { infoUser } from "./api/userServicesInfo.api";
 import { logoutUser } from "./api/userServicesLogout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PaypalComponent from "./components/paypal";
 import "./App.css";
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
           element={<FormUsers onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/registrate" element={<FormRegistro />} />
+        <Route path="/paypal" element={<PaypalComponent />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/" element={<Navigate to="/landing" />} />
         <Route
