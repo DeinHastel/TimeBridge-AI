@@ -311,6 +311,7 @@ const [isOpen, setIsOpen] = useState(false);
                           <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
                           <Button white onClick={() => setOpen(true)} >Comprar</Button>
                         </div>
+                        <Gradient/>
                     </div>
                   </div>
                 </div>
