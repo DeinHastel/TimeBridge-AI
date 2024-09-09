@@ -16,6 +16,8 @@ import { getConversacion } from '../api/conversacion.api';
 import { infoUser } from '../api/userServicesInfo.api'
 import Section from '../components/Section';
 import Heading from '../components/Heading';
+import { Gradient } from '../components/design/Services';
+import Button from '../components/Button';
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
     const [input, setInput] = useState("");
@@ -282,9 +284,12 @@ const [isOpen, setIsOpen] = useState(false);
                               </div>
                           </dl>
                       </div>
+                      <Gradient/>
                   </div>
                   </div>
+                  
                 </div>
+                
                 </Section>
               )
             })}>
@@ -293,11 +298,23 @@ const [isOpen, setIsOpen] = useState(false);
 
           <button className="listaItems" onClick={() => handleClick(Cohete, "",{
               content: (
-                <div>
-                  <h3 className="text-white text-2xl font-semibold">Mejora a Pro</h3>
-                  <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
-                  <button onClick={() => setOpen(true)} className='bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded'>Comprar</button>
+                <Section>
+                  <Heading
+                  className="text-center h2" 
+                  title="Mejora a pro"
+                  />
+                <div className='container'>
+                  <div className='relative'>
+                    <div class="relative justify-center z-1 flex items-center h-[20rem] 
+                      mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
+                        <div className='flex flex-col'>
+                          <p className='parrafoModal'>Valor en dinero colombiano: XXXX</p>
+                          <Button white onClick={() => setOpen(true)} >Comprar</Button>
+                        </div>
+                    </div>
+                  </div>
                 </div>
+                </Section>
               )
             })}>
               <img src={Cohete} alt="" className="listaItemsImg" />Mejora a pro
