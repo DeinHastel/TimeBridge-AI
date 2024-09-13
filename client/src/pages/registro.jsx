@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import { InsertarUsuario } from '../api/registrados.api'
 import { useNavigate } from 'react-router-dom'
 import { registerUser } from '../api/userServices.api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
  
 export function RegistroUsuario() {
     const [formData, setFormData] = useState({
@@ -30,23 +32,53 @@ export function RegistroUsuario() {
         setErrorMessage('');
         try{
             const data = await registerUser(formData);
+            toast.success("Usuario registrado exitosamente!", {
+                onClose: () => navigate('/login'), // Redirige cuando el toast se cierre
+                autoClose: 1000,
+                position: "top-center", // Tiempo en milisegundos antes de que el toast se cierre automáticamente
+            });
             console.log("success", data)
-            navigate('/login');
         }
         catch(error){
             if (error.email) {
-            setErrorMessage("Error con el correo: " + error.email);
+                toast.error('Error con el correo del usuario ',{
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });        
+            setErrorMessage("Error con el correo ");
             }
             if (error.username) {
-            setErrorMessage("Error con el nombre de usuario: " + error.username);
+                toast.error('Error con el nombre del usuario',{
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            setErrorMessage("Error con el nombre de usuario ");
             }
             if (error.non_field_errors) {
-            setErrorMessage("Error con la contraseña: " + error.non_field_errors);
+                toast.error('Error con la contraseña del usuario',{
+                    position: "top-left",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            setErrorMessage("Error con la contraseña ");
             }
             else (error)=> {
             setErrorMessage("Error desconocido: " + error);
             }
-            
             console.error("Error al registrarse", error)
         } finally {
             setIsLoading(false);
@@ -109,13 +141,13 @@ export function RegistroUsuario() {
                             type='checkbox'
                             id='recuerdame'
                         />
-                        <label className='text-xl ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
+                        <label className='lg:text-xl ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
                     </div>
-                    <button className='text-xl font-medium text-base text-purple-700'>Olvide mi contraseña</button>
+                    <button className='lg:text-xl font-medium text-base text-purple-700'>Olvide mi contraseña</button>
                 </div>
                 <div className='text-align-center mt-4 flex justify-items-center'>
-                    <p class=' text-xl'>¿ya tienes un usuario?    </p>
-                    <button onClick={() => { navigate('/login'); }} className='font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
+                    <p class=' text-xl'>¿ya tienes un usuario?</p>
+                    <button onClick={() => { navigate('/login'); }} className='pl-5 font-medium text-xl text-purple-700'>   inicia sesion aqui</button>
                 </div>
                 <div className='mt-8 flex flex-col gap-y-4'>
                 <button
@@ -125,8 +157,8 @@ export function RegistroUsuario() {
                 className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out py-3 rounded-xl bg-purple-700 text-black text-lg font-bold'>Ingresar
                 </button>
                 </div>
+                <ToastContainer />
             </form>
-        
         </div>
     )
 

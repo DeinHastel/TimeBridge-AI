@@ -4,6 +4,8 @@ import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from "react"
 import { loginUser } from '../api/userServicesLogin.api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
  
 export function LoginUsuario({ onLoginSuccess }) {
@@ -35,7 +37,11 @@ export function LoginUsuario({ onLoginSuccess }) {
       localStorage.setItem("refreshToken", data.tokens.refresh)
 
       onLoginSuccess(data.username);
-      navigate('/timebridge')
+      toast.success("Inicio de sesion exitoso!", {
+        onClose: () => navigate('/timebridge'), // Redirige cuando el toast se cierre
+        autoClose: 1000,
+        position: "top-center", // Tiempo en milisegundos antes de que el toast se cierre automáticamente
+    });
 
     }
 
@@ -43,6 +49,16 @@ export function LoginUsuario({ onLoginSuccess }) {
       console.error("Error al iniciar sesion", error)
       
       setErrorMessage("Error con los datos en el inicio de sesión");
+      toast.error('Error con los datos en el inicio de sesion',{
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    }); 
+      
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +68,7 @@ export function LoginUsuario({ onLoginSuccess }) {
     return(
         <div className='bg-black px-10 py-20 rounded-3xl border-2 border-purple-700 text-white'>
             <h1 className='text-5xl font-semibold text-purple-700'>Bienvenido</h1>
-            <p className='font-medium text-xl text-white mt-4'>Por favor ingresa tus datos.</p>
+            <p className='font-medium text-lg text-white mt-4'>Por favor ingresa tus datos.</p>
             <form className='mt-8 text-white' onSubmit={handleSubmit}>
                 <div>
                     <label className='text-xl font-medium'>Correo</label>
@@ -84,7 +100,7 @@ export function LoginUsuario({ onLoginSuccess }) {
                             type='checkbox'
                             id='recuerdame'
                         />
-                        <label className='text-xl ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
+                        <label className='lg:text-xl ml-2 font-medium text-base' htmlFor="recuerdame">Recuerdame</label>
                     </div>
                     <button 
 
@@ -105,6 +121,7 @@ export function LoginUsuario({ onLoginSuccess }) {
                 </button>
                 </div>
                 {/* </Link> */}
+                <ToastContainer />
             </form>
         
         </div>
