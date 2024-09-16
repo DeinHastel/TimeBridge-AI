@@ -68,9 +68,6 @@ export function TimeBridgeIA () {
       // Scroll to the end of the messages
       msgEnd.current.scrollIntoView();
 
-      ()=>{
-        initPaypal()
-      }
     }, [selectedChat]);
     
     const handleSend = async () => {
@@ -197,6 +194,16 @@ const [isOpen, setIsOpen] = useState(false);
     ]);
 
     };
+    const [showPaypal, setShowPaypal] = useState(false); // Estado para mostrar/ocultar
+
+    const handlePaypalClick = () => {
+      setShowPaypal(!setShowPaypal); // Alternar estado}
+      initPaypal(); 
+      if (showPaypal) {
+        // Inicializar PayPal solo si el botón está visible}
+      }
+    };
+
     let paypal;
     const initPaypal = async() =>{
         
@@ -231,10 +238,7 @@ const [isOpen, setIsOpen] = useState(false);
         }
 
     }
-    useEffect(
-        ()=>{
-            initPaypal()
-        },[])
+    
 
     const [open, setOpen] = useState(false);
     const [imagenModal, setImagenModal] = useState(null);
@@ -351,14 +355,18 @@ const [isOpen, setIsOpen] = useState(false);
                   />
                 <div className='container'>
                   <div className='relative'>
-                    <div class="relative justify-center z-1 flex items-center h-[20rem] 
+                    <div className="relative justify-center z-1 flex items-center h-[20rem] 
                       mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
-                        <div id='btns-paypal' className='flex flex-col pb-3'>
-                          <p className='parrafoModal pb-10'>Valor de la suscripcion 10 USD</p>
-                          
-                          <Button white onClick={initPaypal}>Comprar</Button>
-                        </div>
-                        <Gradient/>
+                      <div className="flex flex-col pb-3">
+                        <p className="parrafoModal pb-10">Valor de la suscripcion 10 USD</p>
+                          <div id="btns-paypal"></div>
+                        {showPaypal ? (
+                          <div id="btns-paypal"></div> // Donde se renderizarán los botones de PayPal
+                        ) : (
+                          <Button white onClick={handlePaypalClick}>Comprar</Button>
+                        )}
+                      </div>
+
                     </div>
                   </div>
                   <Gradient/>
