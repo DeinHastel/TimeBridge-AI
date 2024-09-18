@@ -45,7 +45,7 @@ import {
     {
       id: "1",
       title: "Precios",
-      url: "/login",
+      url: "#pricing",
     },
     {
       id: "2",
