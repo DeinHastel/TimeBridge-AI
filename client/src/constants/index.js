@@ -45,7 +45,7 @@ import {
     {
       id: "1",
       title: "Precios",
-      url: "#pricing",
+      url: "/login",
     },
     {
       id: "2",
@@ -60,13 +60,13 @@ import {
     {
       id: "4",
       title: "New account",
-      url: "#signup",
+      url: "/registrate",
       onlyMobile: true,
     },
     {
       id: "5",
       title: "Sign in",
-      url: "#login",
+      url: "/login",
       onlyMobile: true,
     },
   ];
@@ -221,7 +221,7 @@ import {
       id: "1",
       title: "Premium",
       description: "Chatbot de IA avanzado, soporte prioritario, sin limite en espacio",
-      price: "40.000",
+      price: "10 USD",
       features: [
         "Un chatbot de IA avanzado que puede comprender consultas complejas",
         "Un registro de tus conversaciones sin limite",

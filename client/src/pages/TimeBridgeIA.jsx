@@ -17,9 +17,12 @@ import { infoUser } from '../api/userServicesInfo.api'
 import { loadScript } from "@paypal/paypal-js"
 import { apiCreateOrderPaypal } from "../api/paypal";
 import { apiOnApprovePaypal } from "../api/paypal";
+import {updateUserRole} from "../api/userUpdateRol.api"
 import Section from '../components/Section';
 import Heading from '../components/Heading';
 import { Gradient } from '../components/design/Services';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Button from '../components/Button';
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
@@ -187,11 +190,19 @@ const [isOpen, setIsOpen] = useState(false);
     };
 
     const handleChatNew = async () => {
-      setSelectedChat(false)
+      if (chats.length === 5 && userInfo.rol != 3) {
+        toast.warning(`solo puedes tener 5 chats en una cuenta gratis`, {
+          autoClose: 3000,
+          position: "top-center", // Tiempo en milisegundos antes de que el toast se cierre automáticamente
+      });
+      }else{
+        setSelectedChat(false)
       setMessages([
         { text: "Hi, I am TimeBridgeAI",
           isBot: "bot", }
     ]);
+      }
+      
 
     };
     const [showPaypal, setShowPaypal] = useState(false); // Estado para mostrar/ocultar
@@ -229,7 +240,15 @@ const [isOpen, setIsOpen] = useState(false);
                       async onApprove(data){
                         console.log("en el componente ",data)
                         const details = await apiOnApprovePaypal(data)
-                        alert(`Transaction completed by ${details.payer.name.given_name}`);
+
+                        toast.success(`compra completada por ${details.payer.name.given_name} ahora ${userInfo.username} eres premiun. re logea para efectuar cambios`, {
+                          onClose: () => window.location.reload(), // cierra el modal
+                          autoClose: 3000,
+                          position: "top-center", // Tiempo en milisegundos antes de que el toast se cierre automáticamente
+                      });
+
+                        updateUserRole(userInfo.id, 3)
+
                       }
                 }).render("#btns-paypal");
             } catch (error) {
@@ -254,7 +273,7 @@ const [isOpen, setIsOpen] = useState(false);
 
 
     //recoleccion datos usuario
-    const [userInfo, setUserInfo] = useState({id: "", username: "", email: ""});
+    const [userInfo, setUserInfo] = useState({id: "", username: "", email: "", rol: ""});
 
 
     return (
@@ -331,6 +350,27 @@ const [isOpen, setIsOpen] = useState(false);
                                   {userInfo.date_joined}
                                   </dd>
                               </div>
+                              <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                  <dt class="text-xl font-medium text-white">
+                                      estado cuenta
+                                  </dt>
+                                  
+                                  {userInfo.rol == 3?( 
+                                    <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                      premiun
+                                    </dd>
+                                  
+                                    ):userInfo.rol == 2?(
+                                      <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                        admin
+                                      </dd>
+                                    ):(
+                                      <dd class="mt-1 text-xl text-white sm:mt-0 sm:col-span-2">
+                                        usuario gratis
+                                      </dd>
+                                    )
+                                  }
+                              </div>
                           </dl>
                       </div>
                       <Gradient/>
@@ -346,36 +386,62 @@ const [isOpen, setIsOpen] = useState(false);
               <img src={Casa} alt="" className="listaItemsImg" />Perfil
           </button>
 
-          <button className="listaItems" onClick={() => handleClick(Cohete, "",{
+          {userInfo.rol !== 3 ? (
+            <button className="listaItems" onClick={() => handleClick(Cohete, "", {
               content: (
                 <Section>
                   <Heading
-                  className="text-center h2" 
-                  title="Mejora a pro"
+                    className="text-center h2" 
+                    title="Mejora a pro"
                   />
-                <div className='container'>
-                  <div className='relative'>
-                    <div className="relative justify-center z-1 flex items-center h-[20rem] 
-                      mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
-                      <div className="flex flex-col pb-3">
-                        <p className="parrafoModal pb-10">Valor de la suscripcion 10 USD</p>
+                  <div className='container'>
+                    <div className='relative'>
+                      <div className="relative justify-center z-1 flex items-center h-[20rem] 
+                        mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
+                        <div className="flex flex-col pb-3">
+                          <p className="parrafoModal pb-10">Valor de la suscripcion 10 USD</p>
                           <div id="btns-paypal"></div>
-                        {showPaypal ? (
-                          <div id="btns-paypal"></div> // Donde se renderizarán los botones de PayPal
-                        ) : (
-                          <Button white onClick={handlePaypalClick}>Comprar</Button>
-                        )}
+                          {showPaypal && userInfo.rol != 1 ? (
+                            <div id="btns-paypal"></div> // Donde se renderizarán los botones de PayPal
+                          ) : (
+                            <Button white onClick={handlePaypalClick}>Comprar</Button>
+                          )}
+                        </div>
                       </div>
-
                     </div>
+                    <Gradient/>
                   </div>
-                  <Gradient/>
-                </div>
                 </Section>
               )
             })}>
               <img src={Cohete} alt="" className="listaItemsImg" />Mejora a pro
-          </button>
+            </button>
+          ) : (
+            <button className="listaItems" onClick={() => handleClick(Cohete, "", {
+              content: (
+                <Section>
+                  <Heading
+                    className="text-center h2" 
+                    title="Mejora a pro"
+                  />
+                  <div className='container'>
+                    <div className='relative'>
+                      <div className="relative justify-center z-1 flex items-center h-[20rem] 
+                        mb-5 p-12 border border-n-1/10 rounded-3xl overflow-hidden lg:p-10 xl:h-[24rem] shadow bg-n-7">
+                        <div className="flex flex-col pb-3">
+                          <p className="parrafoModal pb-10">ya tienes una cuenta Pro</p>
+                         
+                        </div>
+                      </div>
+                    </div>
+                    <Gradient/>
+                  </div>
+                </Section>
+              )
+            })}>
+              <img src={Cohete} alt="" className="listaItemsImg" />Mejora a pro
+            </button>
+          )}
           <Modal open={open} onClose={() => setOpen(false)} title={modalTitle} >
               <div className='text-center w-560'>
 
@@ -413,6 +479,7 @@ const [isOpen, setIsOpen] = useState(false);
           </div>
 
         </div>
+        <ToastContainer />
       </div>
       
     );

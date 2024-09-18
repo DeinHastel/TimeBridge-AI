@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from .serializer import UserLoginSerializer, UsuarioSerializer,ContraseñaSerializer,RolSerializer,ConversacionSerializer,ComprasSerializer,ChatsSerializer
 from .models import User,Contraseña,Rol,Conversacion,Compras,Chats
 from .serializer import UserRegistrationSerializer
@@ -88,9 +89,20 @@ class UserInfoAPIView(RetrieveAPIView):
     def get_object(self):
         return self.request.user
     
-    
-    
-    
+class UpdateUserRole(APIView):
+    def put(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        new_role_id = request.data.get('rol')
+        if not new_role_id:
+            return Response({'error': 'El rol es requerido'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            new_role = Rol.objects.get(id_rol=new_role_id)
+            user.rol = new_role
+            user.save()
+            return Response({'message': 'Rol actualizado exitosamente'}, status=status.HTTP_200_OK)
+        except Rol.DoesNotExist:
+            return Response({'error': 'Rol no válido'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UsuarioView(viewsets.ModelViewSet):
