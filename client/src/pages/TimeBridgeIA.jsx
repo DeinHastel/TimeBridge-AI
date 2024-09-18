@@ -24,6 +24,7 @@ import { Gradient } from '../components/design/Services';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from '../components/Button';
+import { Navigate, useNavigate } from 'react-router-dom';
 export function TimeBridgeIA () {
     const msgEnd = useRef(null);
     const [input, setInput] = useState("");
@@ -33,6 +34,8 @@ export function TimeBridgeIA () {
         isBot: "bot",
       }
     ]);
+
+    const navigate = useNavigate();
 
     const [selectedChat, setSelectedChat] = useState(null); // Estado para el chat seleccionado
     const [chats, setChats] = useState([]);
@@ -271,6 +274,23 @@ const [isOpen, setIsOpen] = useState(false);
       setOpen(true);
     };
 
+    const handlelogout = async () => {
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (refreshToken) {
+          await logoutUser({ refresh: refreshToken });
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          setLoggedIn(false);
+          setUsername("");
+          navigate('/login')
+
+        }
+      } catch (error) {
+        console.log("Failed Logout");
+        navigate('/login')
+      }
+    };
 
     //recoleccion datos usuario
     const [userInfo, setUserInfo] = useState({id: "", username: "", email: "", rol: ""});
@@ -371,14 +391,19 @@ const [isOpen, setIsOpen] = useState(false);
                                     )
                                   }
                               </div>
+                              
                           </dl>
+                          
                       </div>
+                      
                       <Gradient/>
                   </div>
+                  
                   </div>
                   <Gradient/>
                   
                 </div>
+                <Button white onClick={handlelogout}>Log out</Button>
                 
                 </Section>
               )

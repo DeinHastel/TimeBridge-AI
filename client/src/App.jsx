@@ -45,22 +45,7 @@ function App() {
     setLoggedIn(true);
     setUsername(username);
   };
-
-  const handlelogout = async () => {
-    try {
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (refreshToken) {
-        await logoutUser({ refresh: refreshToken });
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        setLoggedIn(false);
-        setUsername("");
-      }
-    } catch (error) {
-      console.log("Failed Logout");
-    }
-  };
-
+  
   return (
     <BrowserRouter>
       <Routes>

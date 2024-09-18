@@ -34,7 +34,7 @@ const PricingList = () => {
 
                 <Button 
                 className="w-full mb-6"
-                href={item.price ? '/pricing' : 'mailto:timebridgesupport@gmail.com'}
+                href={item.price ? '/login' : 'mailto:timebridgesupport@gmail.com'}
                 white={!!item.price}
                 >    
                     {item.price ?
